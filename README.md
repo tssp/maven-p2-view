@@ -12,6 +12,11 @@ Anyway in an environment with thousands of reads and writes - potentially concur
 * Guarantee consistency even for partially deployed artifacts
 * Avoid blocking to not slow down read and write access
 
+# Code Climate
+
+[![Build Status](https://travis-ci.org/coding-me/maven-p2-view.svg?branch=master)](https://travis-ci.org/coding-me/maven-p2-view)
+
+
 # Acknowledgments
 
 * Klaus: for discussing actor systems on a whiteboard

@@ -1,5 +1,13 @@
 # See http://about.travis-ci.org/docs/user/build-configuration/
+sudo: false
+
 language: scala
+
+cache:
+  directories:
+    - $HOME/.m2/repository
+    - $HOME/.sbt
+    - $HOME/.ivy2
 
 # Fix https://github.com/travis-ci/travis-ci/issues/4527
 before_script:
