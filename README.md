@@ -16,6 +16,34 @@ Anyway in an environment with thousands of reads and writes - potentially concur
 
 [![Build Status](https://travis-ci.org/coding-me/maven-p2-view.svg?branch=master)](https://travis-ci.org/coding-me/maven-p2-view)
 
+# Actor System
+
+![Actor System](http://g.gravizo.com/g?
+  digraph G {
+    node [ fontname=Helvetica, fontsize=16];
+    router[shape=box, label="Repository Router"];
+    rr1[label="Repository\\nReceptionist\\n(Repo 1)"];
+    rr2[label="Repository\\nReceptionist\\n(Repo n)"];
+    router -> {rr1, rr2};
+    mg[label="Metadata Generator"];
+    mgu[label="Metadata Updater"];
+    mgr[label="Metadata Rebuilder"];
+    mg -> {mgu, mgr};
+    ic[label="Artifact Collector"];
+    ici[label="Insert Artifact Collector"];
+    icd[label="Delete Artifact Collector"];
+    rr1 -> {ic, mg};
+    ic -> {ici, icd};
+    aa1[label="Artifact\\nAnalyzer", fontsize=12];
+    aa2[label="Artifact\\nAnalyzer", fontsize=12];
+    aa3[label="Artifact\\nAnalyzer", fontsize=12];
+    aa4[label="Artifact\\nAnalyzer", fontsize=12];
+    aa5[label="Artifact\\nAnalyzer", fontsize=12];
+    aa6[label="Artifact\\nAnalyzer", fontsize=12];
+    ici -> {aa1, aa2, aa3};
+    icd -> {aa4, aa5, aa6};
+  }
+)
 
 # Acknowledgments
 
