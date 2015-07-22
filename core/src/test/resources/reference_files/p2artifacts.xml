@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='1'>
+  <artifact classifier='osgi.bundle' id='example-bundle' version='0.1.0.201507201658'>
+    <properties size='5'>
+      <property name='artifact.size' value='61424'/>
+      <property name='download.size' value='61424'/>
+      <property name='maven-groupId' value='example.group'/>
+      <property name='maven-artifactId' value='example-bundle'/>
+      <property name='maven-version' value='0.1.0-SNAPSHOT'/>
+    </properties>
+  </artifact>
+</artifacts>

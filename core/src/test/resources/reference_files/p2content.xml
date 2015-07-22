@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='example-bundle' version='0.1.0.201507201658'>
+    <update id='example-bundle' range='[0.0.0,0.1.0.201507201658)' severity='0'/>
+    <properties size='5'>
+      <property name='org.eclipse.equinox.p2.name' value='Bundle'/>
+      <property name='org.eclipse.equinox.p2.provider' value='Eclipse.org'/>
+      <property name='maven-groupId' value='example.group'/>
+      <property name='maven-artifactId' value='example-bundle'/>
+      <property name='maven-version' value='0.1.0-SNAPSHOT'/>
+    </properties>
+    <provides size='3'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='example-bundle' version='0.1.0.201507201658'/>
+      <provided namespace='osgi.bundle' name='example-bundle' version='0.1.0.201507201658'/>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <requires size='3'>
+      <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.swt' range='3.6.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.ui' range='3.6.0'/>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='example-bundle' version='0.1.0.201507201658'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: example-bundle;singleton:=true&#xA;Bundle-Version: 0.1.0.201507201658&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>
