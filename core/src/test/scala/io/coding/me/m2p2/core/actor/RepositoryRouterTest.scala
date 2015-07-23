@@ -28,8 +28,8 @@ class RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec"))
     
     "respond with an empty list of repositories when asked for" in {
       
-      routerRef ! ListRepositoryRequest
-      expectMsg(ListRepositoryResponse(List[RepositoryInfo]()))
+      routerRef ! ListRepositoriesRequest
+      expectMsg(ListRepositoriesResponse(Set[RepositoryId]()))
     }
     
     val id= RepositoryId("repo-1")
@@ -48,9 +48,9 @@ class RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec"))
     
     "respond with a non-empty list of repositories when asked for" in {
       
-      routerRef ! ListRepositoryRequest
+      routerRef ! ListRepositoriesRequest
       
-      val r= expectMsgType[ListRepositoryResponse]
+      val r= expectMsgType[ListRepositoriesResponse]
       
       assert(r.repositories.size == 1)
       assert(r.repositories.head.id == id)

@@ -5,6 +5,9 @@ import akka.actor.ActorRef
 import akka.actor.ActorLogging
 import akka.actor.Actor
 import akka.actor.Props
+import scala.concurrent.duration._
+import akka.pattern.ask
+
 
 /**
  * Companion object grouping the repository messages that form the API.
@@ -32,12 +35,12 @@ object RepositoryRouter {
   /**
    * Requests for the available repositories
    */
-  case object ListRepositoryRequest
+  case object ListRepositoriesRequest
   
   /**
    * Response for the available repositories
    */
-  case class ListRepositoryResponse(repositories: List[RepositoryInfo]) 
+  case class ListRepositoriesResponse(repositories: Set[RepositoryId]) 
 }
 
 /**
@@ -50,11 +53,11 @@ class RepositoryRouter extends Actor with ActorLogging {
   /**
    * 
    */
-  var internalRepositories = Map.empty[RepositoryId, (ActorRef, RepositoryInfo)]
+  var internalRepositories = Map.empty[RepositoryId, ActorRef]
   
   override def receive = {
     
-    case ListRepositoryRequest => 
-      sender ! ListRepositoryResponse(internalRepositories.values.map(_._2).toList)
+    case ListRepositoriesRequest => 
+      sender ! ListRepositoriesResponse(internalRepositories.keySet)
   }
 }
