@@ -1,4 +1,4 @@
-package io.coding.me.util.p2.core.internal.model
+package io.coding.me.m2p2.core.internal.model
 
 import java.io.File
 import java.io.FileInputStream
@@ -9,8 +9,8 @@ import scala.util.Try
 
 import com.typesafe.scalalogging.LazyLogging
 
-import io.coding.me.util.p2.core.internal.extension.StringExtensions.isNotNullOrEmpty
-import io.coding.me.util.p2.core.internal.resource.TryWithResource
+import io.coding.me.m2p2.core.internal.extension.StringExtensions.isNotNullOrEmpty
+import io.coding.me.m2p2.core.internal.resource.TryWithResource
 import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.events.Attribute
 import javax.xml.stream.events.EndElement

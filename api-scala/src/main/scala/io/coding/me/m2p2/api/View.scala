@@ -7,8 +7,8 @@ import scala.concurrent.duration._
 
 import com.typesafe.scalalogging.LazyLogging
 
-import io.coding.me.util.p2.core.actor.RepositoryRouter
-import io.coding.me.util.p2.core.actor.RepositoryRouter.RepositoryId
+import io.coding.me.m2p2.core.actor.RepositoryRouter
+import io.coding.me.m2p2.core.actor.RepositoryRouter.RepositoryId
 
 trait View {
 

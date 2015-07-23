@@ -1,4 +1,4 @@
-package io.coding.me.util.p2.core.actor
+package io.coding.me.m2p2.core.actor
 
 import akka.actor.ActorSystem
 import akka.actor.ActorRef

@@ -1,11 +1,15 @@
-package io.coding.me.util.p2.core.actor
+package io.coding.me.m2p2.core.actor
+
+import io.coding.me.m2p2.core.actor.RepositoryRouter._;
 
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.WordSpecLike
 import org.scalatest.Matchers
+
 import akka.actor.ActorSystem
 import akka.testkit.{ DefaultTimeout, ImplicitSender, TestKit }
 import scala.concurrent.duration._
+
 import com.typesafe.config.ConfigFactory
 
 /**
@@ -15,9 +19,10 @@ class RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec"))
     with DefaultTimeout with ImplicitSender
     with WordSpecLike with Matchers with BeforeAndAfterAll {
 
+
   import RepositoryRouter._
   
-  val routerRef = system.actorOf(P2RepositoryRouter.props())
+  val routerRef = system.actorOf(RepositoryRouter.props())
   
   "A repository router" should {
     

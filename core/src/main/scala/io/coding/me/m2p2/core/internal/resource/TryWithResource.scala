@@ -1,4 +1,4 @@
-package io.coding.me.util.p2.core.internal.resource
+package io.coding.me.m2p2.core.internal.resource
 
 import java.io.Closeable
 import scala.util.{ Try, Success, Failure }

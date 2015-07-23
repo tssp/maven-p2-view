@@ -1,4 +1,4 @@
-package io.coding.me.util.p2.core.internal.model
+package io.coding.me.m2p2.core.internal.model
 
 /**
  * Naive representation of a Maven artifact coordinate

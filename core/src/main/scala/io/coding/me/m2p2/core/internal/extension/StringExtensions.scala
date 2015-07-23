@@ -1,4 +1,4 @@
-package io.coding.me.util.p2.core.internal.extension
+package io.coding.me.m2p2.core.internal.extension
 
 /**
  * @author tim@coding-me.com
