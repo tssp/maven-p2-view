@@ -115,7 +115,7 @@ object P2Artifact extends LazyLogging {
       }
 
     }
-    
+
     logger.debug(s"Found ${p2artifacts.size} artifacts in file ${file}")
 
     p2artifacts.toList

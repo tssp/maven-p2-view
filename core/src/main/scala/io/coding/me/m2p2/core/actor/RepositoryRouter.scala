@@ -26,33 +26,33 @@ object RepositoryRouter {
 class RepositoryRouter extends Actor with ActorLogging {
 
   /**
-   * Stores all registered repositories 
+   * Stores all registered repositories
    */
   var internalRepositories = Map.empty[RepositoryId, ActorRef]
 
   override def receive = {
 
-    case DeleteRepositoryRequest(id) => 
-      if(!internalRepositories.contains(id)) {
-        
+    case DeleteRepositoryRequest(id) =>
+      if (!internalRepositories.contains(id)) {
+
         sender ! DeleteRepositoryResponse(id, false, Some("Repository does not exist"))
-      
+
       } else {
-        
+
         context.stop(internalRepositories(id))
-        internalRepositories= internalRepositories - id
+        internalRepositories = internalRepositories - id
         sender ! DeleteRepositoryResponse(id, true, None)
       }
-    
+
     case CreateRepositoryRequest(id) =>
 
       if (!internalRepositories.contains(id)) {
-        
-        internalRepositories= internalRepositories + (id -> context.actorOf(RepositoryReceptionist.props(id))) 
+
+        internalRepositories = internalRepositories + (id -> context.actorOf(RepositoryReceptionist.props(id)))
         sender ! CreateRepositoryResponse(id, false)
-      
+
       } else {
-        
+
         sender ! CreateRepositoryResponse(id, true)
       }
 

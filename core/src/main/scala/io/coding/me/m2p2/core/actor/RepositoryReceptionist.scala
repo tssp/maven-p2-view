@@ -20,14 +20,12 @@ object RepositoryReceptionist {
 class RepositoryReceptionist(repositoryId: RepositoryId, created: DateTime) extends Actor with ActorLogging {
 
   log.info(s"Creating repository-receptionist ${repositoryId}")
-  
-  
-  
+
   override def postStop() = {
-    
+
     log.info(s"Stopping repository-receptionist ${repositoryId} (what a pity :-( )")
   }
-  
+
   override def receive = {
 
     case _ => // noop

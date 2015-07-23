@@ -6,11 +6,11 @@ import scala.concurrent.Future
 import java.io.File
 
 trait Repository {
-  
+
   def insert(mavenArtifact: MavenFile): Future[Unit]
   def removeA(mavenArtifact: MavenFile): Future[Unit]
-  
+
   def getArtifact(p2Artifact: P2File): Future[Option[MavenFile]]
-  
-  def getStatistic():Future[RepositoryStatistic]
+
+  def getStatistic(): Future[RepositoryStatistic]
 }

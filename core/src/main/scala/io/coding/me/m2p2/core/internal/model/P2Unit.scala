@@ -102,16 +102,16 @@ object P2Unit extends LazyLogging {
           val a_id = attributes.find(_.getName.getLocalPart == "id").map(_.getValue).headOption
           val a_version = attributes.find(_.getName.getLocalPart == "version").map(_.getValue).headOption
           val a_classifier = attributes.find(_.getName.getLocalPart == "classifier").map(_.getValue).headOption
-          
+
           if (a_id.isDefined && a_version.isDefined && a_classifier.isDefined) {
-            
+
             artifacts += Artifact(a_id.get, a_version.get, a_classifier.get)
-            
+
           } else {
-            
+
             logger.warn(s"Content file ${file} seems to have invalid artifact sections. Can't parse XML properly.")
           }
-        
+
         case s: StartElement if s.getName.getLocalPart == "unit" =>
           val attributes = s.getAttributes.toList.asInstanceOf[List[Attribute]]
 
@@ -136,7 +136,7 @@ object P2Unit extends LazyLogging {
         case _ => // noop
       }
     }
-    
+
     logger.debug(s"Found ${p2units.size} units and ${p2units.flatMap(_.artifacts).size} artifacts in file ${file}")
 
     p2units.toList
