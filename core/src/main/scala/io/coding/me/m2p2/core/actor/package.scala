@@ -35,4 +35,15 @@ package object actor {
    * Response
    */
   case class CreateRepositoryResponse(id: RepositoryId, existing: Boolean)
+  
+  
+  /**
+   * Request to delete a repository
+   */
+  case class DeleteRepositoryRequest(id: RepositoryId)
+  
+  /**
+   * Response
+   */
+  case class DeleteRepositoryResponse(id: RepositoryId, deleted: Boolean, reason: Option[String])  
 }
