@@ -20,11 +20,28 @@ Anyway in an environment with thousands of reads and writes - potentially concur
 
 ## The Scala API
 
+The Scala API for the Maven-P2-View is fully asynchronous API internally calling the actor system. Every function - except the main entry point - returns a future.
 
 ```scala
-class XXX {
-  
+import io.coding.me.m2p2.api._
+
+// initial list of files in the repository
+val files = ...
+
+// create the view system, main entry point, should be unqiue within the JVM
+val view = View()
+
+// create repository
+val repoFuture = view.create("snapshots")
+
+repoFuture.andThen{ repo ->
+
+  repo.rebuild(files)
+
+}.andThen{ metadata ->
+
 }
+
 ```
 # Actor System
 

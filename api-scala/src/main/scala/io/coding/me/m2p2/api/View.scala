@@ -5,10 +5,7 @@ import akka.util.Timeout
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import com.typesafe.scalalogging.LazyLogging
-import io.coding.me.m2p2.core.actor.RepositoryRouter
-import io.coding.me.m2p2.core.actor.RepositoryRouter.RepositoryId
-import io.coding.me.m2p2.core.actor.RepositoryRouter.ListRepositoriesRequest
-import io.coding.me.m2p2.core.actor.RepositoryRouter.ListRepositoriesResponse
+import io.coding.me.m2p2.core.actor._
 
 trait View {
 
@@ -16,7 +13,7 @@ trait View {
    * Creates a new repository in the system. If the repository is known to the system an existing one will be returned.
    */
   def create(ident: String): Future[Option[Repository]]
-  
+
   /**
    * Returns a list of repositories known by the view
    */
@@ -27,8 +24,8 @@ object View {
 
   import akka.pattern._
 
-  val DEFAULT_NAME= "M2P2-View"
-  
+  val DEFAULT_NAME = "M2P2-View"
+
   private class ViewImplementation(system: ActorSystem, owner: Boolean) extends View with LazyLogging {
 
     logger.info(s"Creating new M2P2 View (owner: ${owner})")
@@ -44,14 +41,14 @@ object View {
           logger.warn(s"Could not create repository ${ident}", ex)
           None
       }
-      
-    def createInternalRepository(repositoryId: RepositoryId):Repository = {
-      
+
+    def createInternalRepository(repositoryId: RepositoryId): Repository = {
+
       null
     }
-      
+
     override def getRepositories() = router.ask(ListRepositoriesRequest)
-      .map { case lrr:ListRepositoriesResponse => Some(lrr.repositories.map(createInternalRepository).toSet) }
+      .map { case lrr: ListRepositoriesResponse => Some(lrr.repositories.map(createInternalRepository).toSet) }
       .recover {
         case ex =>
           logger.warn(s"Could not detect repositories", ex)

@@ -34,16 +34,16 @@ class RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec"))
     
     val id= RepositoryId("repo-1")
     
-    /*"create a new repository receptionist when asked for" in {
+    "create a new repository receptionist when asked for" in {
       
       routerRef ! CreateRepositoryRequest(id)
-      expectMsg(CreateRepositoryResponse(id, true))
+      expectMsg(CreateRepositoryResponse(id, false))
     }
     
     "not create a new repository receptionist when repository already exists" in {
       
       routerRef ! CreateRepositoryRequest(id)
-      expectMsg(CreateRepositoryResponse(id, false))
+      expectMsg(CreateRepositoryResponse(id, true))
     }
     
     "respond with a non-empty list of repositories when asked for" in {
@@ -53,7 +53,7 @@ class RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec"))
       val r= expectMsgType[ListRepositoriesResponse]
       
       assert(r.repositories.size == 1)
-      assert(r.repositories.head.id == id)
-    }*/
+      assert(r.repositories.head == id)
+    }
   }
 }
