@@ -49,7 +49,7 @@ repoFuture.andThen{ repo ->
 }
 
 ```
-# Actor System
+## Actor System
 
 ![Actor System](http://g.gravizo.com/g?
   digraph G {
@@ -77,6 +77,10 @@ repoFuture.andThen{ repo ->
     icd -> {aa4, aa5, aa6};
   }
 )
+
+The *Repository Router* is the main entry point for the actor system. He keeps track of the created and deleted repositories and for the rest he forwards messages to the appropriate repositories.
+
+The *Repository Receptionists* are responsible for exactly one view on a Maven repository. The hold the P2 metadata and statistical information, and - most important - they manage the concurrent read and write access. Beside that the delegate all compute intensive task to their child actors. 
 
 # Acknowledgments
 
