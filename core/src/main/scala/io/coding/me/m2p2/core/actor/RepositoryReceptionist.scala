@@ -30,6 +30,6 @@ class RepositoryReceptionist(repositoryId: RepositoryId, created: DateTime) exte
   
   override def receive = {
 
-    case _ => println("KkJKJKJ")
+    case _ => // noop
   }
 }
