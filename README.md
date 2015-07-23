@@ -16,6 +16,16 @@ Anyway in an environment with thousands of reads and writes - potentially concur
 
 [![Build Status](https://travis-ci.org/coding-me/maven-p2-view.svg?branch=master)](https://travis-ci.org/coding-me/maven-p2-view)
 
+# Internals
+
+## The Scala API
+
+
+```scala
+class XXX {
+  
+}
+```
 # Actor System
 
 ![Actor System](http://g.gravizo.com/g?

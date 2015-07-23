@@ -9,13 +9,13 @@ import scala.concurrent.duration._
 import com.typesafe.config.ConfigFactory
 
 /**
- * @author tim@coding-me.com
+ * 
  */
-class P2RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec"))
+class RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec"))
     with DefaultTimeout with ImplicitSender
     with WordSpecLike with Matchers with BeforeAndAfterAll {
 
-  import P2RepositoryRouter._
+  import RepositoryRouter._
   
   val routerRef = system.actorOf(P2RepositoryRouter.props())
   

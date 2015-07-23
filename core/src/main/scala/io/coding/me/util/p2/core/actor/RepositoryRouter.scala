@@ -9,12 +9,12 @@ import akka.actor.Props
 /**
  * Companion object grouping the repository messages that form the API.
  */
-object P2RepositoryRouter {
+object RepositoryRouter {
 
   /**
    * Factory method for the actor system
    */
-  def props(): Props = Props(new P2RepositoryRouter())
+  def props(): Props = Props(new RepositoryRouter())
 
   
   /**
@@ -43,9 +43,9 @@ object P2RepositoryRouter {
 /**
  * Forms the route node of the P2 repository system.
  */
-class P2RepositoryRouter extends Actor with ActorLogging {
+class RepositoryRouter extends Actor with ActorLogging {
   
-  import P2RepositoryRouter._
+  import RepositoryRouter._
   
   /**
    * 

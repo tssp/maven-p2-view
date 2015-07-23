@@ -1,20 +1,19 @@
-name := "m2-p2-view"
+name := "maven-p2-view"
 
 val commonSettings = Seq(
   organization := "io.coding-me",
   scalaVersion := "2.11.7",
   version := "0.1-SNAPSHOT",
   scalacOptions := Seq(
-    "-language:implicitConversions", 
+    "-language:implicitConversions",
+    "-language:postfixOps",
     "-feature",
     "-unchecked",
     "-deprecation",
     "-encoding", "utf8")
 )
 
-// Versions
 val akkaVersion= "2.3.12"
-
 
 lazy val coreDependencies = Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
@@ -26,11 +25,14 @@ lazy val coreDependencies = Seq(
   )
 
 lazy val core = project.in(file("core"))
+  .settings(name := "m2p2-core")
   .settings(commonSettings)
   .settings(libraryDependencies ++= coreDependencies)
 
-lazy val n2x = project.in(file("nexus-2.x-view"))
-  .settings(commonSettings)
-  .dependsOn(core)
+lazy val apiScala = project.in(file("api-scala"))
+    .settings(name := "m2p2-scala-api")
+    .settings(commonSettings)
+    .settings(libraryDependencies ++= coreDependencies)
+    .dependsOn(core)
 
-lazy val root = project.in(file(".")).aggregate(core, n2x)
+lazy val root = project.in(file(".")).aggregate(core, apiScala)
