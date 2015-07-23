@@ -23,6 +23,7 @@ lazy val loggingDependencies = Seq(
 )
 
 lazy val commonDependencies = Seq(
+  "com.github.nscala-time" %% "nscala-time" % "2.0.0", 
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"

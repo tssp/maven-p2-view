@@ -39,6 +39,7 @@ class RepositoryRouter extends Actor with ActorLogging {
       
       } else {
         
+        context.stop(internalRepositories(id))
         internalRepositories= internalRepositories - id
         sender ! DeleteRepositoryResponse(id, true, None)
       }
@@ -47,7 +48,7 @@ class RepositoryRouter extends Actor with ActorLogging {
 
       if (!internalRepositories.contains(id)) {
         
-        internalRepositories= internalRepositories + (id -> null) // TODO: 
+        internalRepositories= internalRepositories + (id -> context.actorOf(RepositoryReceptionist.props(id))) 
         sender ! CreateRepositoryResponse(id, false)
       
       } else {
