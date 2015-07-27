@@ -58,5 +58,10 @@ class RepositoryRouter extends Actor with ActorLogging {
 
     case ListRepositoriesRequest =>
       sender ! ListRepositoriesResponse(internalRepositories.keySet)
+      
+    case rr:RepositoryRequest => 
+
+      // forward any repository related request to its corresponding repository
+      internalRepositories.get(rr.id).foreach { _.forward(rr) }
   }
 }

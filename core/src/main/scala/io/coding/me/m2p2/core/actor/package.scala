@@ -27,9 +27,17 @@ package object actor {
   case class ListRepositoriesResponse(repositories: Set[RepositoryId])
 
   /**
+   * Base trait for all repository related requests
+   */
+  trait RepositoryRequest {
+    
+    def id: RepositoryId
+  }
+  
+  /**
    * Request to create a new repository
    */
-  case class CreateRepositoryRequest(id: RepositoryId)
+  case class CreateRepositoryRequest(id: RepositoryId) extends RepositoryRequest
 
   /**
    * Response
@@ -39,7 +47,7 @@ package object actor {
   /**
    * Request to delete a repository
    */
-  case class DeleteRepositoryRequest(id: RepositoryId)
+  case class DeleteRepositoryRequest(id: RepositoryId) extends RepositoryRequest
 
   /**
    * Response
