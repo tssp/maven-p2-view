@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='1'>
+  <artifact classifier='org.eclipse.update.feature' id='example-feature-2' version='0.2.0.201507201658'>
+    <properties size='6'>
+      <property name='artifact.size' value='12809'/>
+      <property name='download.size' value='12809'/>
+      <property name='maven-groupId' value='example.group'/>
+      <property name='maven-artifactId' value='example-feature-2'/>
+      <property name='maven-version' value='0.2.0-SNAPSHOT'/>
+      <property name='download.contentType' value='application/zip'/>
+    </properties>
+  </artifact>
+</artifacts>

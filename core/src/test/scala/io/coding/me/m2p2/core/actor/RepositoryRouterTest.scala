@@ -1,16 +1,17 @@
 package io.coding.me.m2p2.core.actor
 
-import io.coding.me.m2p2.core.actor.RepositoryRouter._;
+import java.io.File
 
 import org.scalatest.BeforeAndAfterAll
-import org.scalatest.WordSpecLike
 import org.scalatest.Matchers
+import org.scalatest.WordSpecLike
 
 import akka.actor.ActorSystem
-import akka.testkit.{ DefaultTimeout, ImplicitSender, TestKit }
-import scala.concurrent.duration._
-
-import com.typesafe.config.ConfigFactory
+import akka.actor.actorRef2Scala
+import akka.testkit.DefaultTimeout
+import akka.testkit.ImplicitSender
+import akka.testkit.TestKit
+import io.coding.me.m2p2.core.MavenFile
 
 /**
  *
@@ -20,6 +21,8 @@ class RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec"))
     with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   import RepositoryRouter._
+
+  def getRepositoryFile(name: String): MavenFile = new MavenFile(getClass.getResource(s"/reference_repository/${name}").toURI())
 
   val routerRef = system.actorOf(RepositoryRouter.props())
 
@@ -55,6 +58,17 @@ class RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec"))
       r.repositories.head shouldBe id
     }
 
+    "respond properly when inserting an artifact" in {
+
+      val file = new File(".") //getRepositoryFile("xxx"))
+
+      routerRef ! InsertArtifactRequest(id, file)
+
+      val r = expectMsgType[InsertArtifactResponse]
+
+      r shouldBe InsertArtifactResponse(id, file, false)
+    }
+
     "remove a repository when asked for" in {
 
       routerRef ! DeleteRepositoryRequest(id)
@@ -84,6 +98,5 @@ class RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec"))
 
       r.repositories.size shouldBe 0
     }
-
   }
 }

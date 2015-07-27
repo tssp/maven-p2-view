@@ -4,6 +4,7 @@ import akka.actor.ActorLogging
 import akka.actor.Actor
 import akka.actor.Props
 import org.joda.time.DateTime
+import io.coding.me.m2p2.core.actor.artifact.ArtifactCollector
 
 /**
  * Companion object
@@ -21,13 +22,14 @@ class RepositoryReceptionist(repositoryId: RepositoryId, created: DateTime) exte
 
   log.info(s"Creating repository-receptionist ${repositoryId}")
 
-  override def postStop() = {
-
-    log.info(s"Stopping repository-receptionist ${repositoryId} (what a pity :-( )")
-  }
+  val artifactCollectorRef = context.actorOf(ArtifactCollector.props(repositoryId), "actor-collector")
 
   override def receive = {
 
-    case _ => // noop
+    case iar: InsertArtifactRequest => 
+      artifactCollectorRef.forward(iar)
+      
+    case dar: DeleteArtifactRequest => 
+      artifactCollectorRef.forward(dar)
   }
 }

@@ -1,5 +1,6 @@
 package io.coding.me.m2p2.core
 
+import io.coding.me.m2p2.core.internal.model.MavenArtifact
 package object actor {
 
   // Messages
@@ -53,4 +54,25 @@ package object actor {
    * Response
    */
   case class DeleteRepositoryResponse(id: RepositoryId, deleted: Boolean, reason: Option[String])
+
+  /**
+   * Request to insert a new file into the view
+   */
+  case class InsertArtifactRequest(id: RepositoryId, artifact: MavenFile) extends RepositoryRequest
+
+  /**
+   * Response
+   */
+  case class InsertArtifactResponse(id: RepositoryId, artifact: MavenFile, updateTriggered: Boolean) extends RepositoryRequest
+  
+    /**
+   * Request to delete a file from the view
+   */
+  case class DeleteArtifactRequest(id: RepositoryId, artifact: MavenFile) extends RepositoryRequest
+
+  /**
+   * Response
+   */
+  case class DeleteArtifactResponse(id: RepositoryId, artifact: MavenFile, updateTriggered: Boolean) extends RepositoryRequest
+  
 }

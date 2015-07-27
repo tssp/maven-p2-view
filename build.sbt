@@ -22,17 +22,24 @@ lazy val loggingDependencies = Seq(
   "ch.qos.logback" % "logback-classic" % logbackVersion
 )
 
+lazy val metricDependencies = Seq(
+  "io.dropwizard.metrics" % "metrics-core" % "3.1.2"
+)
+
 lazy val commonDependencies = Seq(
-  "com.github.nscala-time" %% "nscala-time" % "2.0.0", 
+
+  "com.github.nscala-time" %% "nscala-time" % "2.0.0",
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion % "test",
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
-) ++ loggingDependencies
+) ++ loggingDependencies ++ metricDependencies
+
+lazy val coreDependencies = commonDependencies ++ metricDependencies
 
 lazy val core = project.in(file("core"))
   .settings(name := "m2p2-core")
   .settings(commonSettings)
-  .settings(libraryDependencies ++= commonDependencies)
+  .settings(libraryDependencies ++= coreDependencies)
 
 lazy val apiScala = project.in(file("api-scala"))
     .settings(name := "m2p2-scala-api")

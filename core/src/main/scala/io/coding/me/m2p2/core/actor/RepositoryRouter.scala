@@ -7,6 +7,7 @@ import akka.actor.Actor
 import akka.actor.Props
 import scala.concurrent.duration._
 import akka.pattern.ask
+import kamon.Kamon
 
 /**
  * Companion object grouping the repository messages that form the API.
@@ -30,6 +31,18 @@ class RepositoryRouter extends Actor with ActorLogging {
    */
   var internalRepositories = Map.empty[RepositoryId, ActorRef]
 
+  override def preStart() = {
+    
+    // TODO: This is the most ugly place to start Kamon - anyway: Kamon requires it!
+    Kamon.start()
+  }
+  
+  override def postStop() = {
+
+    // TODO: This is the most ugly place to stop Kamon - anyway: Kamon requires it!
+    Kamon.shutdown()
+  }
+  
   override def receive = {
 
     case DeleteRepositoryRequest(id) =>
@@ -62,6 +75,6 @@ class RepositoryRouter extends Actor with ActorLogging {
     case rr:RepositoryRequest => 
 
       // forward any repository related request to its corresponding repository
-      internalRepositories.get(rr.id).foreach { _.forward(rr) }
+      internalRepositories.get(rr.id).foreach( _.forward(rr) )
   }
 }
