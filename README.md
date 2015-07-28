@@ -31,7 +31,7 @@ This library should be used when developing Eclipse RCP plugins, features or ext
 * Asynchronous & non-blocking metadata generation
 * Available repository extensions:
 ** Sonatype Nexus 2.x
-* Reporting based on dropwizard.io
+* Reporting based on kamon.io
 
 # Planned Features
 * Support for bundle root files
