@@ -8,7 +8,6 @@ import io.coding.me.m2p2.core.MavenFile
 import io.coding.me.m2p2.core.actor.InsertArtifactRequest
 import io.coding.me.m2p2.core.actor.InsertArtifactResponse
 import io.coding.me.m2p2.core.actor.RepositoryId
-import io.coding.me.m2p2.core.internal.metric.ArtifactCollectorMetrics
 
 /**
  * Companion object
@@ -26,8 +25,6 @@ class InsertArtifactCollector(repositoryId: RepositoryId) extends Actor with Act
 
   def triggersUpdate(mavenFile: MavenFile): Boolean = false
 
-  val metrics= ArtifactCollectorMetrics.insert(repositoryId.id)
-  
   override def receive = {
 
     case iar: InsertArtifactRequest =>
