@@ -30,18 +30,6 @@ class RepositoryRouter extends Actor with ActorLogging {
    * Stores all registered repositories
    */
   var internalRepositories = Map.empty[RepositoryId, ActorRef]
-
-  override def preStart() = {
-    
-    // TODO: This is the most ugly place to start Kamon - anyway: Kamon requires it!
-    Kamon.start()
-  }
-  
-  override def postStop() = {
-
-    // TODO: This is the most ugly place to stop Kamon - anyway: Kamon requires it!
-    Kamon.shutdown()
-  }
   
   override def receive = {
 

@@ -6,6 +6,8 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 import com.typesafe.scalalogging.LazyLogging
 import io.coding.me.m2p2.core.actor._
+import kamon.Kamon
+
 
 trait View {
 
@@ -18,18 +20,26 @@ trait View {
    * Returns a list of repositories known by the view
    */
   def getRepositories(): Future[Option[Set[Repository]]]
+
+  /**
+   * Clears any resources and shuts the system down
+   */
+  def shutdown(): Unit
 }
 
 object View {
 
   import akka.pattern._
 
-  val DEFAULT_NAME = "M2P2-View"
+  private[api] val DEFAULT_NAME = "M2P2-View"
 
   private class ViewImplementation(system: ActorSystem, owner: Boolean) extends View with LazyLogging {
 
     logger.info(s"Creating new M2P2 View (owner: ${owner})")
 
+    logger.info(s"Starting metrics backend")
+    Kamon.start()
+    
     implicit val context = system.dispatcher
     implicit val defaultTimeout = Timeout(10 seconds)
     implicit val router = system.actorOf(RepositoryRouter.props(), "m2p2-router")
@@ -41,6 +51,18 @@ object View {
           logger.warn(s"Could not create repository ${ident}", ex)
           None
       }
+
+    override def shutdown = {
+
+      logger.info("Shutting down P2 View")
+
+      if (owner) {
+
+        system.shutdown()
+      }
+      
+      Kamon.shutdown()
+    }
 
     def createInternalRepository(repositoryId: RepositoryId): Repository = {
 

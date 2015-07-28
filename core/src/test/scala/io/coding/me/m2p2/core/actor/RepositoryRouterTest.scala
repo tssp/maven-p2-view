@@ -1,17 +1,16 @@
 package io.coding.me.m2p2.core.actor
 
 import java.io.File
-
 import org.scalatest.BeforeAndAfterAll
 import org.scalatest.Matchers
 import org.scalatest.WordSpecLike
-
 import akka.actor.ActorSystem
 import akka.actor.actorRef2Scala
 import akka.testkit.DefaultTimeout
 import akka.testkit.ImplicitSender
 import akka.testkit.TestKit
 import io.coding.me.m2p2.core.MavenFile
+import kamon.Kamon
 
 /**
  *
@@ -23,6 +22,16 @@ class RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec"))
   import RepositoryRouter._
 
   def getRepositoryFile(name: String): MavenFile = new MavenFile(getClass.getResource(s"/reference_repository/${name}").toURI())
+
+  override def beforeAll() = {
+
+    Kamon.start()
+  }
+
+  override def afterAll() = {
+
+    Kamon.shutdown()
+  }
 
   val routerRef = system.actorOf(RepositoryRouter.props())
 

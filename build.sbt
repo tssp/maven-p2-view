@@ -15,6 +15,7 @@ val commonSettings = Seq(
 
 val akkaVersion= "2.3.12"
 val logbackVersion= "1.1.3"
+val kamonVersion = "0.4.0"
 
 lazy val loggingDependencies = Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
@@ -23,7 +24,9 @@ lazy val loggingDependencies = Seq(
 )
 
 lazy val metricDependencies = Seq(
-  "io.dropwizard.metrics" % "metrics-core" % "3.1.2"
+  "io.kamon" %% "kamon-core" % kamonVersion,
+  "io.kamon" %% "kamon-log-reporter" % kamonVersion % "test",
+  "org.aspectj" % "aspectjweaver" % "1.8.5"
 )
 
 lazy val commonDependencies = Seq(
@@ -40,11 +43,9 @@ lazy val core = project.in(file("core"))
   .settings(name := "m2p2-core")
   .settings(commonSettings)
   .settings(libraryDependencies ++= coreDependencies)
+  .settings(aspectjSettings)
+  .settings(javaOptions <++= AspectjKeys.weaverOptions in Aspectj)
+  .settings(fork in run := true)
+  .settings(fork in Test := true)
 
-lazy val apiScala = project.in(file("api-scala"))
-    .settings(name := "m2p2-scala-api")
-    .settings(commonSettings)
-    .settings(libraryDependencies ++= commonDependencies)
-    .dependsOn(core)
-
-lazy val root = project.in(file(".")).aggregate(core, apiScala)
+lazy val root = project.in(file(".")).aggregate(core)
