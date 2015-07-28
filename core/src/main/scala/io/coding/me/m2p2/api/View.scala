@@ -37,6 +37,9 @@ object View {
 
     logger.info(s"Creating new M2P2 View (owner: ${owner})")
 
+    logger.info(s"Starting metrics backend")
+    Kamon.start()
+    
     implicit val context = system.dispatcher
     implicit val defaultTimeout = Timeout(10 seconds)
     implicit val router = system.actorOf(RepositoryRouter.props(), "m2p2-router")
@@ -57,6 +60,8 @@ object View {
 
         system.shutdown()
       }
+      
+      Kamon.shutdown()
     }
 
     def createInternalRepository(repositoryId: RepositoryId): Repository = {

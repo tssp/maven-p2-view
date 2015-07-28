@@ -25,7 +25,7 @@ lazy val loggingDependencies = Seq(
 
 lazy val metricDependencies = Seq(
   "io.kamon" %% "kamon-core" % kamonVersion,
-  "io.kamon" %% "kamon-log-reporter" % kamonVersion,
+  "io.kamon" %% "kamon-log-reporter" % kamonVersion % "test",
   "org.aspectj" % "aspectjweaver" % "1.8.5"
 )
 

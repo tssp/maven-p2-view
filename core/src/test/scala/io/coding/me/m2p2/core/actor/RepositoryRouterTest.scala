@@ -15,7 +15,7 @@ import kamon.Kamon
 /**
  *
  */
-class RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec")) 
+class RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec"))
     with DefaultTimeout with ImplicitSender
     with WordSpecLike with Matchers with BeforeAndAfterAll {
 
@@ -23,19 +23,16 @@ class RepositoryRouterTest extends TestKit(ActorSystem("TestKitUsageSpec"))
 
   def getRepositoryFile(name: String): MavenFile = new MavenFile(getClass.getResource(s"/reference_repository/${name}").toURI())
 
-  
-  /*override def beforeAll() = {
-    
-    println("Starting Metrics Backend")
+  override def beforeAll() = {
+
     Kamon.start()
   }
-  
+
   override def afterAll() = {
-    
-    println("Stopping Metrics Backend")
+
     Kamon.shutdown()
-  }*/
-  
+  }
+
   val routerRef = system.actorOf(RepositoryRouter.props())
 
   "A repository router" should {

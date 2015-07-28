@@ -25,5 +25,10 @@ class ViewTest extends WordSpecLike with Matchers with ScalaFutures {
       view.getRepositories().futureValue shouldBe defined
       view.getRepositories().futureValue shouldBe Some(Set())
     }
+    
+    "be stoppable" in {
+      
+      view.shutdown()
+    }
   }
 }
