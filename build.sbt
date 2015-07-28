@@ -46,13 +46,6 @@ lazy val core = project.in(file("core"))
   .settings(aspectjSettings)
   .settings(javaOptions <++= AspectjKeys.weaverOptions in Aspectj)
   .settings(fork in run := true)
+  .settings(fork in Test := true)
 
-
-
-lazy val apiScala = project.in(file("api-scala"))
-    .settings(name := "m2p2-scala-api")
-    .settings(commonSettings)
-    .settings(libraryDependencies ++= commonDependencies)
-    .dependsOn(core)
-
-lazy val root = project.in(file(".")).aggregate(core, apiScala)
+lazy val root = project.in(file(".")).aggregate(core)

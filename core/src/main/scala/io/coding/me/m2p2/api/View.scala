@@ -8,6 +8,7 @@ import com.typesafe.scalalogging.LazyLogging
 import io.coding.me.m2p2.core.actor._
 import kamon.Kamon
 
+
 trait View {
 
   /**
@@ -35,9 +36,6 @@ object View {
   private class ViewImplementation(system: ActorSystem, owner: Boolean) extends View with LazyLogging {
 
     logger.info(s"Creating new M2P2 View (owner: ${owner})")
-    logger.info(s"Initializing metrics backend")
-
-    Kamon.start()
 
     implicit val context = system.dispatcher
     implicit val defaultTimeout = Timeout(10 seconds)
@@ -59,8 +57,6 @@ object View {
 
         system.shutdown()
       }
-
-      Kamon.shutdown()
     }
 
     def createInternalRepository(repositoryId: RepositoryId): Repository = {
