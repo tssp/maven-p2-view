@@ -9,7 +9,7 @@ import scala.util.Try
 
 import com.typesafe.scalalogging.LazyLogging
 
-import io.coding.me.m2p2.core.internal.extension.StringExtensions.isNotNullOrEmpty
+import io.coding.me.m2p2.core.internal.extension.StringExtensions.string2extension
 import io.coding.me.m2p2.core.internal.resource.TryWithResource
 import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.events.Attribute

@@ -6,9 +6,10 @@ import kamon.metric.GenericEntityRecorder
 import kamon.metric.instrument.Time
 import kamon.Kamon
 
-class ArtifactCollectorMetrics(instrumentFactory: InstrumentFactory) extends GenericEntityRecorder(instrumentFactory) {
+class ArtifactCollectorMetrics(instrumentFactory: InstrumentFactory, getQueueSize: () => Long) extends GenericEntityRecorder(instrumentFactory) {
 
-  val queueSize = minMaxCounter("queue-size")
+  // https://github.com/kamon-io/Kamon/blob/master/kamon-akka/src/main/scala/kamon/akka/DispatcherMetrics.scala
+  val queueSize = gauge("queue-size", getQueueSize())
 }
 
 object ArtifactCollectorMetrics extends EntityRecorderFactory[ArtifactCollectorMetrics] {
@@ -16,5 +17,5 @@ object ArtifactCollectorMetrics extends EntityRecorderFactory[ArtifactCollectorM
   def apply(name: String) = Kamon.metrics.entity(ArtifactCollectorMetrics, name)
 
   def category: String = "insert-artifacts"
-  def createRecorder(instrumentFactory: InstrumentFactory): ArtifactCollectorMetrics = new ArtifactCollectorMetrics(instrumentFactory)
+  def createRecorder(instrumentFactory: InstrumentFactory): ArtifactCollectorMetrics = new ArtifactCollectorMetrics(instrumentFactory, null)
 }

@@ -32,8 +32,6 @@ class InsertArtifactCollector(repositoryId: RepositoryId) extends Actor with Act
 
     case iar: InsertArtifactRequest =>
 
-      metrics.queueSize.increment()
-      
       if (triggersUpdate(iar.artifact))
         sender ! InsertArtifactResponse(iar.id, iar.artifact, true)
       else
