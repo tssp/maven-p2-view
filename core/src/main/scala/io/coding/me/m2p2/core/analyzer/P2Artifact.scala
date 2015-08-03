@@ -69,8 +69,7 @@ object P2Artifact extends LazyLogging {
         case s: StartElement if s.getName.getLocalPart == "property" =>
           val attributes = s.getAttributes.toList.asInstanceOf[List[Attribute]]
 
-          properties = attributes.map { attribute =>
-            ???
+          properties ++= attributes.map { attribute =>
 
             val name = attributes.find(_.getName.getLocalPart == "name").map(_.getValue).headOption
             val value = attributes.find(_.getName.getLocalPart == "value").map(_.getValue).headOption
