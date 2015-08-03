@@ -17,7 +17,7 @@ class P2ArtifactTest extends WordSpecLike with Matchers {
       assert(p2artifacts.get.size == 1)
      
       val refMavenGAV= MavenGAV("example.group", "example-bundle", "0.1.0-SNAPSHOT", None, None)
-      val refArtifact= P2Artifact.P2Artifact("example-bundle", "0.1.0.201507201658", Some("osgi.bundle"), refMavenGAV)
+      val refArtifact= P2Artifact("example-bundle", "0.1.0.201507201658", Some("osgi.bundle"), refMavenGAV)
       
       p2artifacts.get.head shouldBe refArtifact
     }

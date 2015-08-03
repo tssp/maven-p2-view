@@ -14,6 +14,15 @@ import javax.xml.stream.events.EndElement
 import javax.xml.stream.events.StartElement
 
 /**
+ * Naive representation of a P2 installable unit
+ */
+case class P2Artifact(id: String, version: String, classifier: Option[String], mavenReference: MavenGAV) {
+
+  require(id.isNotNullOrEmpty(), "Version of a P2 artifact must not be empty")
+  require(version.isNotNullOrEmpty(), "Version of a P2 artifact must not be empty")
+}
+
+/**
  * Typical format:
  * {{{
  * <?xml version='1.0' encoding='UTF-8'?>
@@ -34,15 +43,6 @@ import javax.xml.stream.events.StartElement
 object P2Artifact extends LazyLogging {
 
   import io.coding.me.m2p2.core.internal.extension.StringExtensions._
-
-  /**
-   * Naive representation of a P2 installable unit
-   */
-  case class P2Artifact(id: String, version: String, classifier: Option[String], mavenReference: MavenGAV) {
-
-    require(id.isNotNullOrEmpty(), "Version of a P2 artifact must not be empty")
-    require(version.isNotNullOrEmpty(), "Version of a P2 artifact must not be empty")
-  }
 
   /**
    * Creates a list of P2 artifact representations based on a file, typically a p2artfiacts.xml file.
@@ -91,7 +91,7 @@ object P2Artifact extends LazyLogging {
           val mavenArtifactId = properties.get("maven-artifactId")
           val mavenVersion = properties.get("maven-version")
           val mavenClassifier = properties.get("maven-classifier")
-          val mavenExtension= properties.get("maven-extension")
+          val mavenExtension = properties.get("maven-extension")
 
           if (id.isDefined && version.isDefined && classifier.isDefined &&
             mavenGroupId.isDefined && mavenArtifactId.isDefined && mavenVersion.isDefined) {

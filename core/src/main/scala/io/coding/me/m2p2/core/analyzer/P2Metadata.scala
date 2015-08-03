@@ -18,6 +18,15 @@ import javax.xml.stream.events.EndElement
 import javax.xml.stream.events.StartElement
 
 /**
+ * Naive representation of a P2 installable unit
+ */
+case class P2Unit(id: String, version: String) {
+
+  require(id.isNotNullOrEmpty(), "Version of a P2 unit must not be empty")
+  require(version.isNotNullOrEmpty(), "Version of a P2 unit must not be empty")
+}
+
+/**
  * Typical format:
  * {{{
  * <?xml version='1.0' encoding='UTF-8'?>
@@ -59,15 +68,6 @@ import javax.xml.stream.events.StartElement
 object P2Metadata extends LazyLogging {
 
   import io.coding.me.m2p2.core.internal.extension.StringExtensions._
-
-  /**
-   * Naive representation of a P2 installable unit
-   */
-  case class P2Unit(id: String, version: String) {
-
-    require(id.isNotNullOrEmpty(), "Version of a P2 unit must not be empty")
-    require(version.isNotNullOrEmpty(), "Version of a P2 unit must not be empty")
-  }
 
   /**
    * Creates a list of P2 unit representations based on a file, typically a p2content.xml file.

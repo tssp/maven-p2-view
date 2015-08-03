@@ -12,9 +12,7 @@ import akka.actor.ActorLogging
 import akka.actor.Props
 import akka.actor.actorRef2Scala
 import io.coding.me.m2p2.core.actor.RepositoryId
-import io.coding.me.m2p2.core.analyzer.P2Artifact.P2Artifact
-import io.coding.me.m2p2.core.analyzer.P2Feature
-import io.coding.me.m2p2.core.analyzer.P2Metadata.P2Unit
+import io.coding.me.m2p2.core.analyzer._
 import io.coding.me.m2p2.core.internal.metric.FileAnalyzerMetrics
 import io.coding.me.m2p2.core.internal.metric.convert2extension
 
