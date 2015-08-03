@@ -1,12 +1,9 @@
-package io.coding.me.m2p2.core.internal.model
+package io.coding.me.m2p2.core.analyzer
 
 import org.scalatest.WordSpecLike
 import org.scalatest.Matchers
 import java.io.File
 
-/**
- * @author tim@coding-me.com
- */
 class MavenMetadataTest extends WordSpecLike with Matchers {
 
   "A valid Maven metadata file" should {
@@ -18,7 +15,7 @@ class MavenMetadataTest extends WordSpecLike with Matchers {
       mavenMetadata should not be None
       mavenMetadata.get should not be empty
       mavenMetadata.get.size shouldBe 4
-      mavenMetadata.get.head shouldBe MavenArtifact("io.coding-me", "test", "1.4.0-20150723.181352-1", "jar", Some("javadoc"))
+      mavenMetadata.get.head shouldBe MavenGAV("io.coding-me", "test", "1.4.0-20150723.181352-1", Some("javadoc"), Some("jar"))
 
     }
   }

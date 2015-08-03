@@ -1,4 +1,4 @@
-package io.coding.me.m2p2.core.internal.model
+package io.coding.me.m2p2.core.analyzer
 
 import com.typesafe.scalalogging.LazyLogging
 import java.io.File
@@ -18,9 +18,9 @@ object MavenMetadata extends LazyLogging {
   /**
    * Creates a list of Maven artifact representations based on a file, typically a maven-metadata.xml file.
    */
-  def apply(file: File): Try[Set[MavenArtifact]] = TryWithResource(new FileInputStream(file)).map { inputStream =>
+  def apply(file: File): Try[Set[MavenGAV]] = TryWithResource(new FileInputStream(file)).map { inputStream =>
 
-    val mavenArtifacts = MutableList.empty[MavenArtifact]
+    val mavenArtifacts = MutableList.empty[MavenGAV]
 
     val factory = XMLInputFactory.newInstance()
     val r = factory.createXMLEventReader(inputStream)
@@ -57,7 +57,7 @@ object MavenMetadata extends LazyLogging {
 
           if (group.isDefined && artifact.isDefined && version.isDefined && extension.isDefined) {
 
-            mavenArtifacts += MavenArtifact(group.get, artifact.get, version.get, extension.get, classifier)
+            mavenArtifacts += MavenGAV(group.get, artifact.get, version.get, classifier, extension)
 
           } else {
 

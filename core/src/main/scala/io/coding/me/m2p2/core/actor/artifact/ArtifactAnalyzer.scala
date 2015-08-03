@@ -1,17 +1,21 @@
 package io.coding.me.m2p2.core.actor.artifact
 
 import java.io.File
+
+import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
+
 import ArtifactAnalyzer.AnalyzeRequest
 import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.Props
+import akka.actor.actorRef2Scala
 import io.coding.me.m2p2.core.actor.RepositoryId
+import io.coding.me.m2p2.core.analyzer.P2Feature
 import io.coding.me.m2p2.core.internal.metric.FileAnalyzerMetrics
 import io.coding.me.m2p2.core.internal.metric.convert2extension
-import io.coding.me.m2p2.core.internal.model.P2Artifact
-import scala.util.Failure
+
 
 /**
  * Companion object
@@ -26,14 +30,14 @@ object ArtifactAnalyzer {
     def result: Option[T]
   }
 
-  case class JarAnalyzeResponse(val file: File, val result: Option[P2Artifact]) extends AnalyzeResponse[P2Artifact]
+  case class JarAnalyzeResponse(val file: File, val result: Option[P2Feature]) extends AnalyzeResponse[P2Feature]
 
   /**
    * Factory method for the actor system
    */
   def props[T](repositoryId: RepositoryId, name: String, analyzer: File => Try[Option[T]], factory: (File, Option[T]) => AnalyzeResponse[T]): Props = Props(new ArtifactAnalyzer(repositoryId, name, analyzer, factory))
 
-  def jarProps(repositoryId: RepositoryId) = props[P2Artifact](repositoryId, "jar-file", null, (file, result) => JarAnalyzeResponse(file, result))
+  def jarProps(repositoryId: RepositoryId) = props[P2Feature](repositoryId, "jar-file", null, (file, result) => JarAnalyzeResponse(file, result))
 
 }
 

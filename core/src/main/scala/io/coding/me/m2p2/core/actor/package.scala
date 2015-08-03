@@ -1,6 +1,5 @@
 package io.coding.me.m2p2.core
 
-import io.coding.me.m2p2.core.internal.model.MavenArtifact
 package object actor {
 
   // Messages
