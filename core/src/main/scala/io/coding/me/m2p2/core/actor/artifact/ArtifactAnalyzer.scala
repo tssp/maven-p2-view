@@ -32,7 +32,7 @@ object ArtifactAnalyzer {
 
   case class P2MetadataAnalyzeResponse(val file: File, val result: Set[P2Unit]) extends AnalyzeResponse[P2Unit]
   case class P2ArtifactAnalyzeResponse(val file: File, val result: Set[P2Artifact]) extends AnalyzeResponse[P2Artifact]
-  case class JarAnalyzeResponse(val file: File, val result: Set[P2Feature]) extends AnalyzeResponse[P2Feature]
+  //case class JarAnalyzeResponse(val file: File, val result: Set[P2Feature]) extends AnalyzeResponse[P2Feature]
 
   /**
    * Factory method for the actor system
@@ -42,7 +42,7 @@ object ArtifactAnalyzer {
   /**
    * Analyzer for JAR files containing feature.xml files
    */
-  def jarProps(repositoryId: RepositoryId) = props[P2Feature](repositoryId, "jar-file", null, (file, result) => JarAnalyzeResponse(file, result))
+  //def jarProps(repositoryId: RepositoryId) = props[P2Feature](repositoryId, "jar-file", null, (file, result) => JarAnalyzeResponse(file, result))
   
   /**
    * Analyzer for *.p2metadata.xml files containing P2Unit artifacts
@@ -78,7 +78,7 @@ class ArtifactAnalyzer[T](repositoryId: RepositoryId, name: String, analyzer: Fi
           sender ! factory(file, result)
 
         case Failure(ex) =>
-          log.warning(s"Could not analyze file ${file}, ignoring artifact.", ex)
+          log.error(ex, s"Could not analyze file ${file}, ignoring artifact.")
           metrics.errors.increment()
       }
   }

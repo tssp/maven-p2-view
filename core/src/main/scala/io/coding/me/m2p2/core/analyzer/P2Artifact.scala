@@ -103,7 +103,7 @@ object P2Artifact extends LazyLogging {
 
           } else {
 
-            logger.warn("Artifact file ${file} seems to be invalid. Can't parse XML properly.")
+            logger.warn(s"Artifact file ${file} seems to be invalid. Can't parse XML properly.")
           }
 
           id = None
