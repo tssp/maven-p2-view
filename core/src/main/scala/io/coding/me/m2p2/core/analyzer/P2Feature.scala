@@ -17,20 +17,20 @@ import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.events.Attribute
 import javax.xml.stream.events.StartElement
 
+/**
+ * Naive representation of an P2 plugin that is referenced by a P2 feature
+ */
+case class P2FeaturePlugin(id: String, version: String)
+
+/**
+ * Naive representation of an P2 feature
+ */
+case class P2Feature(id: String, version: String, plugins: Set[P2FeaturePlugin])
+
 object P2Feature extends LazyLogging {
 
   import io.coding.me.m2p2.core.internal.extension.StringExtensions._
   import scala.collection.JavaConversions._
-
-  /**
-   * Naive representation of an P2 plugin that is referenced by a P2 feature
-   */
-  case class Plugin(id: String, version: String)
-
-  /**
-   * Naive representation of an P2 feature
-   */
-  case class P2Feature(id: String, version: String, plugins: Set[Plugin])
 
   /**
    * Creates a feature representations based on a jar file
@@ -39,7 +39,7 @@ object P2Feature extends LazyLogging {
 
     Option[JarEntry](jarFile.getJarEntry("feature.xml")).flatMap { jarEntry =>
 
-      TryWithResource(jarFile.getInputStream(jarEntry)).flatMap { is =>  apply(is) } match {
+      TryWithResource(jarFile.getInputStream(jarEntry)).flatMap { is => apply(is) } match {
 
         case Success(p2feature) =>
           p2feature
@@ -63,7 +63,7 @@ object P2Feature extends LazyLogging {
     var pluginId: Option[String] = None
     var pluginVersion: Option[String] = None
 
-    var pluginSet = Set.empty[Plugin]
+    var pluginSet = Set.empty[P2FeaturePlugin]
 
     while (r.hasNext()) {
 
@@ -87,7 +87,7 @@ object P2Feature extends LazyLogging {
 
           if (pluginId.isDefined && pluginVersion.isDefined) {
 
-            pluginSet += Plugin(pluginId.get, pluginVersion.get)
+            pluginSet += P2FeaturePlugin(pluginId.get, pluginVersion.get)
 
           } else {
 

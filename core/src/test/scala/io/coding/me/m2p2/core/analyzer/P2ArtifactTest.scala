@@ -13,13 +13,15 @@ class P2ArtifactTest extends WordSpecLike with Matchers {
 
       val p2artifacts = P2Artifact(new File(getClass.getResource("/reference_files/p2artifacts.xml").toURI()))
 
-      assert(p2artifacts.isSuccess)
-      assert(p2artifacts.get.size == 1)
+      p2artifacts.isFailure shouldBe false
+      p2artifacts.get.isDefined shouldBe true
+      p2artifacts.get.get.size shouldBe 1
+      
      
       val refMavenGAV= MavenGAV("example.group", "example-bundle", "0.1.0-SNAPSHOT", None, None)
       val refArtifact= P2Artifact("example-bundle", "0.1.0.201507201658", Some("osgi.bundle"), refMavenGAV)
       
-      p2artifacts.get.head shouldBe refArtifact
+      p2artifacts.get.get.head shouldBe refArtifact
     }
   }
 

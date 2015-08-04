@@ -13,8 +13,9 @@ class P2MetadataTest extends WordSpecLike with Matchers {
 
       val p2metadata = P2Metadata(new File(getClass.getResource("/reference_files/p2content.xml").toURI()))
 
-      assert(p2metadata.isSuccess)
-      assert(p2metadata.get.size == 1)
+      p2metadata.isFailure shouldBe false
+      p2metadata.get.isDefined shouldBe true
+      p2metadata.get.get.size shouldBe 1
     }
 
   }

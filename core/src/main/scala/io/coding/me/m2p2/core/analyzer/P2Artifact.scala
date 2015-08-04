@@ -47,7 +47,7 @@ object P2Artifact extends LazyLogging {
   /**
    * Creates a list of P2 artifact representations based on a file, typically a p2artfiacts.xml file.
    */
-  def apply(file: File): Try[Set[P2Artifact]] = TryWithResource(new FileInputStream(file)).map { inputStream =>
+  def apply(file: File): Try[Option[Set[P2Artifact]]] = TryWithResource(new FileInputStream(file)).map { inputStream =>
 
     val p2artifacts = MutableList.empty[P2Artifact]
 
@@ -119,6 +119,6 @@ object P2Artifact extends LazyLogging {
 
     logger.debug(s"Found ${p2artifacts.size} artifacts in file ${file}")
 
-    p2artifacts.toSet
+    Some(p2artifacts.toSet)
   }
 }

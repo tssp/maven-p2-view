@@ -72,7 +72,7 @@ object P2Metadata extends LazyLogging {
   /**
    * Creates a list of P2 unit representations based on a file, typically a p2content.xml file.
    */
-  def apply(file: File): Try[Set[P2Unit]] = TryWithResource(new FileInputStream(file)).map { inputStream =>
+  def apply(file: File): Try[Option[Set[P2Unit]]] = TryWithResource(new FileInputStream(file)).map { inputStream =>
 
     val p2units = MutableList.empty[P2Unit]
 
@@ -114,7 +114,7 @@ object P2Metadata extends LazyLogging {
 
     logger.debug(s"Found ${p2units.size} installable units in file ${file}")
 
-    p2units.toSet
+    Some(p2units.toSet)
   }
 
 }
