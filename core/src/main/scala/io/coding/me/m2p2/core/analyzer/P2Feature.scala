@@ -37,7 +37,7 @@ object P2Feature extends LazyLogging {
    */
   def apply(file: File): Try[Option[P2Feature]] = TryWithResource(new JarFile(file)).map { jarFile =>
 
-    Option[JarEntry](jarFile.getJarEntry("/feature.xml")).flatMap { jarEntry =>
+    Option[JarEntry](jarFile.getJarEntry("feature.xml")).flatMap { jarEntry =>
 
       TryWithResource(jarFile.getInputStream(jarEntry)).flatMap { is =>  apply(is) } match {
 

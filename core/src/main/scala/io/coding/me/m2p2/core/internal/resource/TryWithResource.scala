@@ -22,7 +22,8 @@ object TryWithResource {
 
       } catch {
 
-        case t: Throwable => Failure(t)
+        case t: Throwable => 
+          Failure(t)
 
       } finally {
 
