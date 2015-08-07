@@ -9,6 +9,7 @@ import io.coding.me.m2p2.core.actor.RepositoryId
 import akka.actor.OneForOneStrategy
 import akka.actor.SupervisorStrategy._
 import scala.concurrent.duration._
+import io.coding.me.m2p2.core.internal.metric.ArtifactCollectorMetrics
 
 /**
  * Companion object
@@ -28,6 +29,9 @@ class ArtifactCollector(repositoryId: RepositoryId) extends Actor with ActorLogg
 
   val insertArtifactRef = context.actorOf(InsertArtifactCollector.props(repositoryId), "insert")
   val deleteArtifactRef = context.actorOf(DeleteArtifactCollector.props(repositoryId), "delete")
+  
+  lazy val metrics = ArtifactCollectorMetrics(repositoryId.id)
+  
 /*
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute, loggingEnabled= true) {
     case _: Exception => Resume
@@ -40,9 +44,11 @@ class ArtifactCollector(repositoryId: RepositoryId) extends Actor with ActorLogg
       throw ex
 
     case iar: InsertArtifactRequest =>
+      metrics.inserts.increment()
       insertArtifactRef.forward(iar)
 
     case dar: DeleteArtifactRequest =>
+      metrics.deletes.increment()
       deleteArtifactRef.forward(dar)
 
   }

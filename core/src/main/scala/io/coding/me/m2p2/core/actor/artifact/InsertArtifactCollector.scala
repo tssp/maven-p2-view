@@ -33,8 +33,6 @@ class InsertArtifactCollector(repositoryId: RepositoryId) extends Actor with Act
 
   log.info(s"Initalizing insert artifact collector for repository ${repositoryId.id}")
   
-  lazy val metrics = ArtifactCollectorMetrics(repositoryId.id)
-
   val analyzerP2Artifact = context.actorOf(ArtifactAnalyzer.p2artifactProps(repositoryId), "p2-artifact")
   val analyzerP2Metadata = context.actorOf(ArtifactAnalyzer.p2metadataProps(repositoryId), "p2-metadata")
   val analyzerP2Feature = context.actorOf(ArtifactAnalyzer.p2featureJarProps(repositoryId), "p2-feature")

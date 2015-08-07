@@ -13,7 +13,7 @@ import akka.actor.Props
 import akka.actor.actorRef2Scala
 import io.coding.me.m2p2.core.actor.RepositoryId
 import io.coding.me.m2p2.core.analyzer._
-import io.coding.me.m2p2.core.internal.metric.FileAnalyzerMetrics
+import io.coding.me.m2p2.core.internal.metric.ArtifactAnalyzerMetrics
 import io.coding.me.m2p2.core.internal.metric.convert2extension
 
 /**
@@ -65,7 +65,7 @@ class ArtifactAnalyzer[T](repositoryId: RepositoryId, name: String, analyzer: Fi
 
   log.debug(s"Initalizing artifact analyzer ${repositoryId.id}:${name}")
 
-  lazy val metrics = FileAnalyzerMetrics(name)
+  lazy val metrics = ArtifactAnalyzerMetrics(s"${repositoryId.id}.${name}")
 
   override def receive = {
 
