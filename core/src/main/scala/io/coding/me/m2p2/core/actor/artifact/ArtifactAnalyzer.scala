@@ -16,7 +16,6 @@ import io.coding.me.m2p2.core.analyzer._
 import io.coding.me.m2p2.core.internal.metric.FileAnalyzerMetrics
 import io.coding.me.m2p2.core.internal.metric.convert2extension
 
-
 /**
  * Companion object
  */
@@ -42,32 +41,37 @@ object ArtifactAnalyzer {
   /**
    * Analyzer for JAR files containing feature.xml files
    */
-  def p2featureJarProps(repositoryId: RepositoryId) = props[P2Feature](repositoryId, "jar-file", P2Feature.apply, (file, result) => P2FeatureAnalyzeResponse(file, result))
-  
+  def p2featureJarProps(repositoryId: RepositoryId) = props[P2Feature](repositoryId, "p2-feature", P2Feature.apply, (file, result) => P2FeatureAnalyzeResponse(file, result))
+
   /**
    * Analyzer for *.p2metadata.xml files containing P2Unit artifacts
    */
-  def p2metadataProps(repositoryId: RepositoryId) = props[Set[P2Unit]](repositoryId, "p2metadata-file", P2Metadata.apply, (file, result) => P2MetadataAnalyzeResponse(file, result))
+  def p2metadataProps(repositoryId: RepositoryId) = props[Set[P2Unit]](repositoryId, "p2-metadata", P2Metadata.apply, (file, result) => P2MetadataAnalyzeResponse(file, result))
 
   /**
    * Analyzer for *.p2artifacts.xml files containing P2Artifact artifacts
    */
-  def p2artifactProps(repositoryId: RepositoryId) = props[Set[P2Artifact]](repositoryId, "p2artifact-file", P2Artifact.apply, (file, result) => P2ArtifactAnalyzeResponse(file, result))
+  def p2artifactProps(repositoryId: RepositoryId) = props[Set[P2Artifact]](repositoryId, "p2-artifact", P2Artifact.apply, (file, result) => P2ArtifactAnalyzeResponse(file, result))
 
-  
 }
 
 class ArtifactAnalyzer[T](repositoryId: RepositoryId, name: String, analyzer: File => Try[Option[T]], factory: (File, Option[T]) => ArtifactAnalyzer.AnalyzeResponse[T]) extends Actor with ActorLogging {
 
   require(analyzer != null, "Artifact analyzer must not be null")
   require(factory != null, "Message factory must not be null")
-  
+
   import io.coding.me.m2p2.core.internal.metric._
   import ArtifactAnalyzer._
 
-  val metrics = FileAnalyzerMetrics(name)
+  log.debug(s"Initalizing artifact analyzer ${repositoryId.id}:${name}")
+
+  lazy val metrics = FileAnalyzerMetrics(name)
 
   override def receive = {
+
+    case ex: Exception =>
+      log.error("Argh, someone send me an exception. This should only happen for testing purposes!")
+      throw ex
 
     case AnalyzeRequest(file) =>
 

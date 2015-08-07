@@ -19,10 +19,23 @@ object DeleteArtifactCollector {
 
 class DeleteArtifactCollector(repositoryId: RepositoryId) extends Actor with ActorLogging {
 
+  log.info(s"Initalizing delete artifact collector for repository ${repositoryId.id}")
 
+  /**
+   * Restarting this actor might lead to data loss. TODO: This must be handled properly!
+   */
+  override def preRestart(reason: Throwable, message: Option[Any]) = {
+    
+    super.preRestart(reason, message)
+  }  
+  
   override def receive = {
 
+    case ex: Exception =>
+      log.error("Argh, someone send me an exception. This should only happen for testing purposes!")
+      throw ex
+
     case _ => // noop      
-      
+
   }
 }
