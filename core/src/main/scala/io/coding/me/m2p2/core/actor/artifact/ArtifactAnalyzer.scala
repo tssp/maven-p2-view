@@ -11,7 +11,7 @@ import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.Props
 import akka.actor.actorRef2Scala
-import io.coding.me.m2p2.core.actor.RepositoryId
+import io.coding.me.m2p2.core.actor._
 import io.coding.me.m2p2.core.analyzer._
 import io.coding.me.m2p2.core.internal.metric.ArtifactAnalyzerMetrics
 import io.coding.me.m2p2.core.internal.metric.convert2extension

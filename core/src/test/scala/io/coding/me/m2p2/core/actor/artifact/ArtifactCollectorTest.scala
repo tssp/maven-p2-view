@@ -15,6 +15,10 @@ import kamon.Kamon
 import io.coding.me.m2p2.core.actor.RepositoryId
 import scala.concurrent.duration._
 import scala.concurrent.Await
+import io.coding.me.m2p2.core.actor.InsertArtifactRequest
+import io.coding.me.m2p2.core.actor.InsertArtifactResponse
+import io.coding.me.m2p2.core.actor.ActorStateRequest
+import io.coding.me.m2p2.core.actor.artifact.InsertArtifactCollector.InsertArtifactStateResponse
 
 /**
  *
@@ -25,7 +29,7 @@ class ArtifactCollectorTest extends TestKit(ActorSystem("TestKitUsageSpec"))
 
   import ArtifactCollector._
 
-  def getRepositoryFile(name: String): MavenFile = new MavenFile(getClass.getResource(s"/reference_repository/${name}").toURI())
+  def getRepositoryFile(name: String): MavenFile = new MavenFile(getClass.getResource(s"/reference_repository/example_v1/example/group/${name}").toURI())
 
   override def beforeAll() = {
 
@@ -40,7 +44,40 @@ class ArtifactCollectorTest extends TestKit(ActorSystem("TestKitUsageSpec"))
   val repositoryId = RepositoryId("repo")
   val collectorRef = TestActorRef(new ArtifactCollector(repositoryId))
 
+  val insertActor = system.actorSelection("/user/*/insert")
+  val deleteActor = system.actorSelection("/user/*/delete")
+
   "An artifact collector" should {
+
+    "properly react when inserting feature artifacts" in {
+
+      val names = Array("-p2metadata.xml", "-p2artifacts.xml", "-root.cocoa.macosx.x86_64.zip", "-root.gtk.linux.x86_64.zip", "-root.win32.win32.x86_64.zip", "-root.zip", ".jar", ".pom").map(suffix => s"example-feature-0.1.0-SNAPSHOT${suffix}")
+      val dir = "example-feature/0.1.0-SNAPSHOT"
+
+      val files = names.map(name => getRepositoryFile(s"${dir}/${name}"))
+
+      files.foreach { file =>
+
+        collectorRef ! InsertArtifactRequest(repositoryId, file)
+
+        val response = expectMsgType[InsertArtifactResponse]
+
+        response.artifact shouldBe file
+      }
+      
+      insertActor ! ActorStateRequest
+     
+      expectMsgPF() { 
+        
+        case r: InsertArtifactStateResponse => 
+          r.state shouldBe "Yeehaw"
+      }
+    }
+  }
+
+  /*
+  "An artifact collector" should {
+   
 
     "properly restart its childs when an exception occurs" in {
       
@@ -51,12 +88,7 @@ class ArtifactCollectorTest extends TestKit(ActorSystem("TestKitUsageSpec"))
     
       system.actorSelection("/user/*/insert/p2-artifact") ! new Exception("Testing analyzer execption supversivor strategy")
     }
-    
-    
-    
-    /*"escalate after too many exception" in {
-      
-      (0 to 20).foreach { i => collectorRef.underlyingActor.insertArtifactRef ! new Exception(s"Testing supervisior strategy (${i}. exception)!") }
-    }*/
   }
+  * */
+  */
 }

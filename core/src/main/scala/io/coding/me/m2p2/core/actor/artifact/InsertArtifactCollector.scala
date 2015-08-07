@@ -1,7 +1,6 @@
 package io.coding.me.m2p2.core.actor.artifact
 
 import scala.concurrent.duration.DurationInt
-
 import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.OneForOneStrategy
@@ -13,6 +12,7 @@ import io.coding.me.m2p2.core.actor.InsertArtifactRequest
 import io.coding.me.m2p2.core.actor.InsertArtifactResponse
 import io.coding.me.m2p2.core.actor.RepositoryId
 import io.coding.me.m2p2.core.internal.metric.ArtifactCollectorMetrics
+import io.coding.me.m2p2.core.actor._
 
 
 /**
@@ -20,6 +20,8 @@ import io.coding.me.m2p2.core.internal.metric.ArtifactCollectorMetrics
  */
 object InsertArtifactCollector {
 
+  case class InsertArtifactStateResponse(state: String) extends ActorStateResponse[String]
+  
   /**
    * Factory method for the actor system
    */
@@ -29,6 +31,8 @@ object InsertArtifactCollector {
 
 class InsertArtifactCollector(repositoryId: RepositoryId) extends Actor with ActorLogging {
  
+  import InsertArtifactCollector._
+  
   def triggersUpdate(mavenFile: MavenFile): Boolean = false
 
   log.info(s"Initalizing insert artifact collector for repository ${repositoryId.id}")
@@ -50,6 +54,9 @@ class InsertArtifactCollector(repositoryId: RepositoryId) extends Actor with Act
     case ex: Exception =>
       log.error("Argh, someone send me an exception. This should only happen for testing purposes!")
       throw ex
+      
+    case ActorStateRequest =>
+      sender ! InsertArtifactStateResponse("Yeehaw")
 
     case iar: InsertArtifactRequest =>
 
