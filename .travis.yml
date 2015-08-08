@@ -29,7 +29,8 @@ notifications:
 
 script:
   - sbt clean coverage test
-  - sbt coverageAggregate
+# Don't aggregate now, only one subproject: - sbt coverageAggregate
+
 
 after_success:
   - sbt coveralls
