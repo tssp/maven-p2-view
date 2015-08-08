@@ -48,4 +48,4 @@ lazy val core = project.in(file("core"))
   .settings(fork in run := true)
   .settings(fork in Test := true)
 
-lazy val root = project.in(file(".")).aggregate(core)
+lazy val root = project.in(file(".")).settings(commonSettings).aggregate(core)

@@ -10,6 +10,8 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-aspectj" % "0.10.2")
 
 resolvers += Classpaths.sbtPluginReleases
 
+resolvers += Resolver.url("scoverage-bintray", url("https://dl.bintray.com/sksamuel/sbt-plugins/"))(Resolver.ivyStylePatterns)
+
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.0.4")
 
 addSbtPlugin("org.scoverage" % "sbt-coveralls" % "1.0.0")
