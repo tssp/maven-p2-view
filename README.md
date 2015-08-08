@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/coding-me/maven-p2-view.svg?branch=master)](https://travis-ci.org/coding-me/maven-p2-view)
+[![Coverage Status](https://coveralls.io/repos/coding-me/maven-p2-view/badge.svg?branch=master&service=github)](https://coveralls.io/github/coding-me/maven-p2-view?branch=master)
+
 # Maven-P2-View
 A library to provide a true P2 repository view on Maven repositories
 
@@ -39,10 +42,6 @@ This library should be used when developing Eclipse RCP plugins, features or ext
 * Future repository extensions:
 ** Sonatype Nexus 3.x
 ** JFrog Artifactory ?.?
-
-# Code Climate
-
-[![Build Status](https://travis-ci.org/coding-me/maven-p2-view.svg?branch=master)](https://travis-ci.org/coding-me/maven-p2-view)
 
 
 # Usage

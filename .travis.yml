@@ -27,4 +27,13 @@ notifications:
     recipients:
       - tim@coding-me.com
 
-script: sbt ++$TRAVIS_SCALA_VERSION test
+script:
+  - sbt clean coverage test &&
+  - sbt && coverageAggregate
+
+after_success:
+  - sbt coveralls
+
+env:
+  global:
+    secure: ""
