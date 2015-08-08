@@ -18,7 +18,7 @@ import scala.concurrent.Await
 import io.coding.me.m2p2.core.actor.InsertArtifactRequest
 import io.coding.me.m2p2.core.actor.InsertArtifactResponse
 import io.coding.me.m2p2.core.actor.ActorStateRequest
-import io.coding.me.m2p2.core.actor.artifact.InsertArtifactCollector.InsertArtifactStateResponse
+import io.coding.me.m2p2.core.actor.ActorStateResponse
 
 /**
  *
@@ -69,8 +69,8 @@ class ArtifactCollectorTest extends TestKit(ActorSystem("TestKitUsageSpec"))
      
       expectMsgPF() { 
         
-        case r: InsertArtifactStateResponse => 
-          r.state shouldBe "Yeehaw"
+        case ActorStateResponse(state: String) => 
+          state shouldBe "Yeehaw"
       }
     }
   }

@@ -62,7 +62,7 @@ package object actor {
   /**
    * Response
    */
-  case class InsertArtifactResponse(id: RepositoryId, artifact: MavenFile, updateTriggered: Boolean) extends RepositoryRequest
+  case class InsertArtifactResponse(id: RepositoryId, artifact: MavenFile, valid: Boolean) extends RepositoryRequest
 
   /**
    * Request to delete a file from the view
@@ -82,5 +82,5 @@ package object actor {
   /**
    * Response, depends on actor implementation
    */
-  trait ActorStateResponse[T]{ def state: T}
+  case class ActorStateResponse[T](state: T)
 }

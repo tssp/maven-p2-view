@@ -25,13 +25,13 @@ object ArtifactAnalyzer {
 
   trait AnalyzeResponse[T] {
 
-    def file: File
+    def artifact: File
     def result: Option[T]
   }
 
-  case class P2MetadataAnalyzeResponse(val file: File, val result: Option[Set[P2Unit]]) extends AnalyzeResponse[Set[P2Unit]]
-  case class P2ArtifactAnalyzeResponse(val file: File, val result: Option[Set[P2Artifact]]) extends AnalyzeResponse[Set[P2Artifact]]
-  case class P2FeatureAnalyzeResponse(val file: File, val result: Option[P2Feature]) extends AnalyzeResponse[P2Feature]
+  case class P2MetadataAnalyzeResponse(val artifact: File, val result: Option[Set[P2Unit]]) extends AnalyzeResponse[Set[P2Unit]]
+  case class P2ArtifactAnalyzeResponse(val artifact: File, val result: Option[Set[P2Artifact]]) extends AnalyzeResponse[Set[P2Artifact]]
+  case class P2FeatureAnalyzeResponse(val artifact: File, val result: Option[P2Feature]) extends AnalyzeResponse[P2Feature]
 
   /**
    * Factory method for the actor system

@@ -50,7 +50,7 @@ abstract class ArtifactAnalyzerTest[T] extends TestKit(ActorSystem("TestKitUsage
       val response = expectMsgAnyClassOf(classOf[AnalyzeResponse[T]])
 
       response should not be null
-      response.file shouldBe analyzerFile
+      response.artifact shouldBe analyzerFile
       response.result should not be empty
     }
   }
