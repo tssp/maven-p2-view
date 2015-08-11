@@ -4,6 +4,8 @@ val commonSettings = Seq(
   organization := "io.coding-me",
   scalaVersion := "2.11.7",
   version := "0.1-SNAPSHOT",
+//  publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository"))),
+//  publishMavenStyle := true,
   scalacOptions := Seq(
     "-language:implicitConversions",
     "-language:postfixOps",
@@ -12,6 +14,9 @@ val commonSettings = Seq(
     "-deprecation",
     "-encoding", "utf8")
 )
+
+
+
 
 val akkaVersion= "2.3.12"
 val logbackVersion= "1.1.3"
@@ -48,4 +53,5 @@ lazy val core = project.in(file("core"))
   .settings(fork in run := true)
   .settings(fork in Test := true)
 
-lazy val root = project.in(file(".")).aggregate(core)
+lazy val root = project.in(file("."))
+  .aggregate(core)
