@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
   <groupId>io.coding-me</groupId>
-  <artifactId>io.coding-me.m2p2-nexus-2.x</artifactId>
+  <artifactId>m2p2-nexus2x</artifactId>
   <version>0.1-SNAPSHOT</version>
-  <name>Maven - P2 View</name>
+  <name>Maven/P2 View for Nexus 2.x</name>
+
   <packaging>nexus-plugin</packaging>
   <description>Virtual P2 View on Maven 2 Repository</description>
+
   <properties>
     <java.version>1.7</java.version>
     <nexus.version>2.11.2-06</nexus.version>
@@ -46,12 +49,12 @@
         <version>${nexus.version}</version>
         <scope>provided</scope>
       </dependency>
-      <dependency>
+      <!--<dependency>
         <groupId>org.sonatype.nexus.plugins</groupId>
         <artifactId>nexus-ui-extjs3-plugin</artifactId>
         <version>${nexus.version}</version>
         <scope>provided</scope>
-      </dependency>
+      </dependency>-->
       <!-- test dependencies -->
       <dependency>
         <groupId>org.sonatype.nexus</groupId>
@@ -94,11 +97,11 @@
       <artifactId>nexus-plugin-api</artifactId>
       <scope>provided</scope>
     </dependency>
-    <dependency>
+    <!--<dependency>
       <groupId>org.sonatype.nexus.plugins</groupId>
       <artifactId>nexus-ui-extjs3-plugin</artifactId>
       <scope>provided</scope>
-    </dependency>
+    </dependency>-->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
