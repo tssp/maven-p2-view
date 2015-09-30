@@ -18,7 +18,7 @@ import org.sonatype.nexus.proxy.item.StorageItem;
 @SuppressWarnings ("deprecation")
 class VirtualStorageCollectionItemFacade implements StorageCollectionItem {
 
-    final DefaultStorageCollectionItem masterCollectionItem;
+    final StorageCollectionItem masterCollectionItem;
     final List<StorageItem> itemList = new ArrayList<>();
 
     /**
@@ -31,7 +31,7 @@ class VirtualStorageCollectionItemFacade implements StorageCollectionItem {
      * @throws IllegalOperationException In case of an Nexus error
      * @throws ItemNotFoundException In case of an Nexus error
      */
-    public VirtualStorageCollectionItemFacade(DefaultStorageCollectionItem masterCollectionItem)
+    public VirtualStorageCollectionItemFacade(StorageCollectionItem masterCollectionItem)
         throws AccessDeniedException, StorageException, NoSuchResourceStoreException, IllegalOperationException,
         ItemNotFoundException {
 

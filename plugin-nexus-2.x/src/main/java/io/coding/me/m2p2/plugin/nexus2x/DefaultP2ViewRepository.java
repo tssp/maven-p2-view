@@ -18,16 +18,20 @@ import org.sonatype.nexus.ApplicationStatusSource;
 import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.configuration.model.CRepositoryExternalConfigurationHolderFactory;
 import org.sonatype.nexus.plugins.*;
+import org.sonatype.nexus.proxy.AccessDeniedException;
 import org.sonatype.nexus.proxy.IllegalOperationException;
 import org.sonatype.nexus.proxy.ItemNotFoundException;
 import org.sonatype.nexus.proxy.LocalStorageException;
+import org.sonatype.nexus.proxy.NoSuchResourceStoreException;
 import org.sonatype.nexus.proxy.ResourceStoreRequest;
+import org.sonatype.nexus.proxy.StorageException;
 import org.sonatype.nexus.proxy.events.RepositoryRegistryEvent;
 import org.sonatype.nexus.proxy.events.RepositoryRegistryEventAdd;
 import org.sonatype.nexus.proxy.events.RepositoryRegistryEventRemove;
 import org.sonatype.nexus.proxy.item.DefaultStorageCollectionItem;
 import org.sonatype.nexus.proxy.item.DefaultStorageFileItem;
 import org.sonatype.nexus.proxy.item.FileContentLocator;
+import org.sonatype.nexus.proxy.item.StorageCollectionItem;
 import org.sonatype.nexus.proxy.item.StorageFileItem;
 import org.sonatype.nexus.proxy.item.StorageItem;
 import org.sonatype.nexus.proxy.item.StorageLinkItem;
@@ -218,11 +222,40 @@ public class DefaultP2ViewRepository extends AbstractShadowRepository implements
     protected StorageItem doRetrieveItem(final ResourceStoreRequest request) throws IllegalOperationException,
         ItemNotFoundException, LocalStorageException {
 
-        // TODO
-
-        StorageItem masterItem = getMasterRepository().getLocalStorage().retrieveItem(getMasterRepository(), request);
-
-        return masterItem;
+    	System.out.println("REQUEST PATH "+request.getRequestPath());
+    	
+    	try {
+    		
+	    	
+	    	if("/".equals(request.getRequestPath())) {
+	
+	    		DefaultStorageCollectionItem dtci= new DefaultStorageCollectionItem(getMasterRepository(), request, true, false);
+	    		
+	    		
+	    		return dtci;
+	    		
+	    		/*StorageItem masterItem = getMasterRepository().getLocalStorage().retrieveItem(getMasterRepository(), request);
+	    		
+	    		if(masterItem instanceof StorageCollectionItem) {
+	    		
+	    			VirtualStorageCollectionItemFacade virtualItem= new VirtualStorageCollectionItemFacade((StorageCollectionItem)masterItem);
+	        		
+	    			return virtualItem;
+	    		}*/
+	    		 
+	    		throw new LocalStorageException("Root path is not a collecction"); 
+	    		
+	    	} else {
+	
+	    		StorageItem masterItem = getMasterRepository().getLocalStorage().retrieveItem(getMasterRepository(), request);
+	
+	            return masterItem;
+	    	}
+	    	
+    	} catch (AccessDeniedException|StorageException|NoSuchResourceStoreException ex) {
+    		
+    		throw new LocalStorageException(ex);
+    	}
     }
 
     @Override
