@@ -63,4 +63,5 @@ lazy val nexus2xPlugin = project.in(file("plugin-nexus-2.x"))
 
 lazy val root = project.in(file("."))
   //.settings(commonSettings)
-  .aggregate(core, nexus2xPlugin)
+  //.aggregate(core, nexus2xPlugin)
+  .aggregate(core)
