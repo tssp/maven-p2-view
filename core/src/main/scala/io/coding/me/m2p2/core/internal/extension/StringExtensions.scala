@@ -1,8 +1,5 @@
 package io.coding.me.m2p2.core.internal.extension
 
-/**
- * @author tim@coding-me.com
- */
 object StringExtensions {
 
   class StringExtension(val value: String) {
@@ -11,5 +8,5 @@ object StringExtensions {
     def isNotNullOrEmpty() = !isNullOrEmpty()
   }
 
-  implicit def isNotNullOrEmpty(value: String): StringExtension = new StringExtension(value)
+  implicit def string2extension(value: String): StringExtension = new StringExtension(value)
 }

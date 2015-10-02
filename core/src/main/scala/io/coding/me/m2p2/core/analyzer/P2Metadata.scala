@@ -1,4 +1,4 @@
-package io.coding.me.m2p2.core.internal.model
+package io.coding.me.m2p2.core.analyzer
 
 import java.io.File
 import java.io.FileInputStream
@@ -9,8 +9,9 @@ import scala.util.Try
 
 import com.typesafe.scalalogging.LazyLogging
 
-import io.coding.me.m2p2.core.internal.extension.StringExtensions.isNotNullOrEmpty
+import io.coding.me.m2p2.core.internal.extension.StringExtensions.string2extension
 import io.coding.me.m2p2.core.internal.resource.TryWithResource
+
 import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.events.Attribute
 import javax.xml.stream.events.EndElement
@@ -18,10 +19,8 @@ import javax.xml.stream.events.StartElement
 
 /**
  * Naive representation of a P2 installable unit
- *
- * @author tim@coding-me.com
  */
-case class P2Unit(id: String, version: String, artifacts: List[P2Unit.Artifact]) {
+case class P2Unit(id: String, version: String) {
 
   require(id.isNotNullOrEmpty(), "Version of a P2 unit must not be empty")
   require(version.isNotNullOrEmpty(), "Version of a P2 unit must not be empty")
@@ -66,19 +65,14 @@ case class P2Unit(id: String, version: String, artifacts: List[P2Unit.Artifact])
  * </units>
  * }}}
  */
-object P2Unit extends LazyLogging {
+object P2Metadata extends LazyLogging {
 
-  case class Artifact(id: String, version: String, classifier: String) {
-
-    require(classifier.isNotNullOrEmpty(), "Classifier of a P2 unit artifact must not be empty")
-    require(id.isNotNullOrEmpty(), "Version of a P2 unit artifact must not be empty")
-    require(version.isNotNullOrEmpty(), "Version of a P2 unit artifact must not be empty")
-  }
+  import io.coding.me.m2p2.core.internal.extension.StringExtensions._
 
   /**
    * Creates a list of P2 unit representations based on a file, typically a p2content.xml file.
    */
-  def apply(file: File): Try[List[P2Unit]] = TryWithResource(new FileInputStream(file)).map { inputStream =>
+  def apply(file: File): Try[Option[Set[P2Unit]]] = TryWithResource(new FileInputStream(file)).map { inputStream =>
 
     val p2units = MutableList.empty[P2Unit]
 
@@ -88,29 +82,11 @@ object P2Unit extends LazyLogging {
     var id: Option[String] = None
     var version: Option[String] = None
 
-    val artifacts = MutableList.empty[Artifact]
-
     while (r.hasNext()) {
 
       val event = r.nextEvent()
 
       event match {
-
-        case s: StartElement if s.getName.getLocalPart == "artifact" =>
-          val attributes = s.getAttributes.toList.asInstanceOf[List[Attribute]]
-
-          val a_id = attributes.find(_.getName.getLocalPart == "id").map(_.getValue).headOption
-          val a_version = attributes.find(_.getName.getLocalPart == "version").map(_.getValue).headOption
-          val a_classifier = attributes.find(_.getName.getLocalPart == "classifier").map(_.getValue).headOption
-
-          if (a_id.isDefined && a_version.isDefined && a_classifier.isDefined) {
-
-            artifacts += Artifact(a_id.get, a_version.get, a_classifier.get)
-
-          } else {
-
-            logger.warn(s"Content file ${file} seems to have invalid artifact sections. Can't parse XML properly.")
-          }
 
         case s: StartElement if s.getName.getLocalPart == "unit" =>
           val attributes = s.getAttributes.toList.asInstanceOf[List[Attribute]]
@@ -122,7 +98,7 @@ object P2Unit extends LazyLogging {
 
           if (id.isDefined && version.isDefined) {
 
-            p2units += P2Unit(id.get, version.get, artifacts.toList)
+            p2units += P2Unit(id.get, version.get)
 
           } else {
 
@@ -131,15 +107,14 @@ object P2Unit extends LazyLogging {
 
           id = None
           version = None
-          artifacts.clear()
 
         case _ => // noop
       }
     }
 
-    logger.debug(s"Found ${p2units.size} units and ${p2units.flatMap(_.artifacts).size} artifacts in file ${file}")
+    logger.debug(s"Found ${p2units.size} installable units in file ${file}")
 
-    p2units.toList
+    Some(p2units.toSet)
   }
 
 }

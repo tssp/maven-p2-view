@@ -1,6 +1,5 @@
 package io.coding.me.m2p2.core
 
-import io.coding.me.m2p2.core.internal.model.MavenArtifact
 package object actor {
 
   // Messages
@@ -31,10 +30,10 @@ package object actor {
    * Base trait for all repository related requests
    */
   trait RepositoryRequest {
-    
+
     def id: RepositoryId
   }
-  
+
   /**
    * Request to create a new repository
    */
@@ -63,9 +62,9 @@ package object actor {
   /**
    * Response
    */
-  case class InsertArtifactResponse(id: RepositoryId, artifact: MavenFile, updateTriggered: Boolean) extends RepositoryRequest
-  
-    /**
+  case class InsertArtifactResponse(id: RepositoryId, artifact: MavenFile, valid: Boolean) extends RepositoryRequest
+
+  /**
    * Request to delete a file from the view
    */
   case class DeleteArtifactRequest(id: RepositoryId, artifact: MavenFile) extends RepositoryRequest
@@ -74,5 +73,14 @@ package object actor {
    * Response
    */
   case class DeleteArtifactResponse(id: RepositoryId, artifact: MavenFile, updateTriggered: Boolean) extends RepositoryRequest
-  
+
+  /**
+   * Generic message to request the state of an actor, used for testing purposes
+   */
+  case object ActorStateRequest
+
+  /**
+   * Response, depends on actor implementation
+   */
+  case class ActorStateResponse[T](state: T)
 }

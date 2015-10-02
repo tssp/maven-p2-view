@@ -1,15 +1,12 @@
-package io.coding.me.m2p2.core.internal.model
+package io.coding.me.m2p2.core.analyzer
 
 import java.io.File
 import java.io.FileInputStream
-
 import scala.collection.JavaConversions.asScalaIterator
 import scala.collection.mutable.MutableList
 import scala.util.Try
-
 import com.typesafe.scalalogging.LazyLogging
-
-import io.coding.me.m2p2.core.internal.extension.StringExtensions.isNotNullOrEmpty
+import io.coding.me.m2p2.core.internal.extension.StringExtensions.string2extension
 import io.coding.me.m2p2.core.internal.resource.TryWithResource
 import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.events.Attribute
@@ -17,15 +14,12 @@ import javax.xml.stream.events.EndElement
 import javax.xml.stream.events.StartElement
 
 /**
- * Naive representation of a P2 artifact
- *
- * @author tim@coding-me.com
+ * Naive representation of a P2 installable unit
  */
-trait P2Artifact extends Equals {
+case class P2Artifact(id: String, version: String, classifier: Option[String], mavenReference: MavenGAV) {
 
-  def id: String
-  def version: String
-  def classifier: String
+  require(id.isNotNullOrEmpty(), "Version of a P2 artifact must not be empty")
+  require(version.isNotNullOrEmpty(), "Version of a P2 artifact must not be empty")
 }
 
 /**
@@ -48,31 +42,12 @@ trait P2Artifact extends Equals {
  */
 object P2Artifact extends LazyLogging {
 
-  class P2ArtifactImpl(val id: String, val version: String, val classifier: String) extends P2Artifact {
-
-    import io.coding.me.m2p2.core.internal.extension.StringExtensions._
-
-    require(classifier.isNotNullOrEmpty(), "Classifier of a P2 artifact must not be empty")
-    require(id.isNotNullOrEmpty(), "Version of a P2 artifact must not be empty")
-    require(version.isNotNullOrEmpty(), "Version of a P2 artifact must not be empty")
-
-    override def canEqual(that: Any) = that.isInstanceOf[P2Artifact]
-
-    override def equals(that: Any) = that match {
-
-      case that: P2Artifact => that.canEqual(this) &&
-        that.id == this.id &&
-        that.version == this.version &&
-        that.classifier == this.classifier
-
-      case _ => false
-    }
-  }
+  import io.coding.me.m2p2.core.internal.extension.StringExtensions._
 
   /**
    * Creates a list of P2 artifact representations based on a file, typically a p2artfiacts.xml file.
    */
-  def apply(file: File): Try[List[P2Artifact]] = TryWithResource(new FileInputStream(file)).map { inputStream =>
+  def apply(file: File): Try[Option[Set[P2Artifact]]] = TryWithResource(new FileInputStream(file)).map { inputStream =>
 
     val p2artifacts = MutableList.empty[P2Artifact]
 
@@ -83,11 +58,25 @@ object P2Artifact extends LazyLogging {
     var version: Option[String] = None
     var classifier: Option[String] = None
 
+    var properties: Map[String, String] = Map.empty
+
     while (r.hasNext()) {
 
       val event = r.nextEvent()
 
       event match {
+
+        case s: StartElement if s.getName.getLocalPart == "property" =>
+          val attributes = s.getAttributes.toList.asInstanceOf[List[Attribute]]
+
+          properties ++= attributes.map { attribute =>
+
+            val name = attributes.find(_.getName.getLocalPart == "name").map(_.getValue).headOption
+            val value = attributes.find(_.getName.getLocalPart == "value").map(_.getValue).headOption
+
+            name -> value
+
+          }.filter(kv => kv._1.isDefined && kv._2.isDefined).map(kv => kv._1.get -> kv._2.get).toMap
 
         case s: StartElement if s.getName.getLocalPart == "artifact" =>
           val attributes = s.getAttributes.toList.asInstanceOf[List[Attribute]]
@@ -98,18 +87,30 @@ object P2Artifact extends LazyLogging {
 
         case s: EndElement if s.getName.getLocalPart == "artifact" =>
 
-          if (id.isDefined && version.isDefined && classifier.isDefined) {
+          val mavenGroupId = properties.get("maven-groupId")
+          val mavenArtifactId = properties.get("maven-artifactId")
+          val mavenVersion = properties.get("maven-version")
+          val mavenClassifier = properties.get("maven-classifier")
+          val mavenExtension = properties.get("maven-extension")
 
-            p2artifacts += new P2ArtifactImpl(id.get, version.get, classifier.get)
+          if (id.isDefined && version.isDefined && classifier.isDefined &&
+            mavenGroupId.isDefined && mavenArtifactId.isDefined && mavenVersion.isDefined) {
+
+            val mavenGav = MavenGAV(mavenGroupId.get, mavenArtifactId.get, mavenVersion.get, mavenClassifier, mavenExtension)
+            val p2artifact = P2Artifact(id.get, version.get, classifier, mavenGav)
+
+            p2artifacts += p2artifact
 
           } else {
 
-            logger.warn("Artifact file ${file} seems to be invalid. Can't parse XML properly.")
+            logger.warn(s"Artifact file ${file} seems to be invalid. Can't parse XML properly.")
           }
 
           id = None
           version = None
           classifier = None
+
+          properties = Map.empty
 
         case _ => // noop
       }
@@ -118,7 +119,6 @@ object P2Artifact extends LazyLogging {
 
     logger.debug(s"Found ${p2artifacts.size} artifacts in file ${file}")
 
-    p2artifacts.toList
+    Some(p2artifacts.toSet)
   }
-
 }

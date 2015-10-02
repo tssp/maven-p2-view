@@ -8,13 +8,14 @@ import kamon.Kamon
 
 class ArtifactCollectorMetrics(instrumentFactory: InstrumentFactory) extends GenericEntityRecorder(instrumentFactory) {
 
-  val queueSize = minMaxCounter("queue-size")
+  val inserts = counter("insert-counter")
+  val deletes = counter("delete-counter")
 }
 
 object ArtifactCollectorMetrics extends EntityRecorderFactory[ArtifactCollectorMetrics] {
 
   def apply(name: String) = Kamon.metrics.entity(ArtifactCollectorMetrics, name)
 
-  def category: String = "insert-artifacts"
+  def category: String = "artifact-collector"
   def createRecorder(instrumentFactory: InstrumentFactory): ArtifactCollectorMetrics = new ArtifactCollectorMetrics(instrumentFactory)
 }
