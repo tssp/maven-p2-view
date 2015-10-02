@@ -9,7 +9,7 @@ import java.io.File
  */
 trait FileNameVersionExtractor {
   
-  val FilePattern = """(.+)-(\d.+-\d{8}\.\d{6}-\d+)-(p2artifacts.xml)""".r
+  val FilePattern = """(.+)-(\d.+-\d{8}\.\d{6}-\d+)-(p2artifacts|p2metadata).xml""".r
 
   def extractMavenVersion(file: File): Try[String] = file.getName() match {
 

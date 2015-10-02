@@ -65,56 +65,58 @@ case class P2Unit(id: String, version: String) {
  * </units>
  * }}}
  */
-object P2Metadata extends LazyLogging {
+object P2Metadata extends FileNameVersionExtractor with LazyLogging {
 
   import io.coding.me.m2p2.core.internal.extension.StringExtensions._
 
   /**
    * Creates a list of P2 unit representations based on a file, typically a p2content.xml file.
    */
-  def apply(file: File): Try[Option[Set[P2Unit]]] = TryWithResource(new FileInputStream(file)).map { inputStream =>
+  def apply(file: File): Try[Option[Set[P2Unit]]] = extractMavenVersion(file).flatMap { mavenVersion =>
+    TryWithResource(new FileInputStream(file)).map { inputStream =>
 
-    val p2units = MutableList.empty[P2Unit]
+      val p2units = MutableList.empty[P2Unit]
 
-    val factory = XMLInputFactory.newInstance()
-    val r = factory.createXMLEventReader(inputStream)
+      val factory = XMLInputFactory.newInstance()
+      val r = factory.createXMLEventReader(inputStream)
 
-    var id: Option[String] = None
-    var version: Option[String] = None
+      var id: Option[String] = None
+      var version: Option[String] = None
 
-    while (r.hasNext()) {
+      while (r.hasNext()) {
 
-      val event = r.nextEvent()
+        val event = r.nextEvent()
 
-      event match {
+        event match {
 
-        case s: StartElement if s.getName.getLocalPart == "unit" =>
-          val attributes = s.getAttributes.toList.asInstanceOf[List[Attribute]]
+          case s: StartElement if s.getName.getLocalPart == "unit" =>
+            val attributes = s.getAttributes.toList.asInstanceOf[List[Attribute]]
 
-          id = attributes.find(_.getName.getLocalPart == "id").map(_.getValue).headOption
-          version = attributes.find(_.getName.getLocalPart == "version").map(_.getValue).headOption
+            id = attributes.find(_.getName.getLocalPart == "id").map(_.getValue).headOption
+            version = attributes.find(_.getName.getLocalPart == "version").map(_.getValue).headOption
 
-        case s: EndElement if s.getName.getLocalPart == "unit" =>
+          case s: EndElement if s.getName.getLocalPart == "unit" =>
 
-          if (id.isDefined && version.isDefined) {
+            if (id.isDefined && version.isDefined) {
 
-            p2units += P2Unit(id.get, version.get)
+              p2units += P2Unit(id.get, version.get)
 
-          } else {
+            } else {
 
-            logger.warn(s"Content file ${file} seems to be invalid. Can't parse XML properly.")
-          }
+              logger.warn(s"Content file ${file} seems to be invalid. Can't parse XML properly.")
+            }
 
-          id = None
-          version = None
+            id = None
+            version = None
 
-        case _ => // noop
+          case _ => // noop
+        }
       }
+
+      logger.debug(s"Found ${p2units.size} installable units in file ${file}")
+
+      Some(p2units.toSet)
     }
-
-    logger.debug(s"Found ${p2units.size} installable units in file ${file}")
-
-    Some(p2units.toSet)
   }
 
 }

@@ -6,4 +6,5 @@ class P2MetadataAnalyzerTest extends ArtifactAnalyzerTest[P2Unit] {
 
   override lazy val analyzerActor = system.actorOf(ArtifactAnalyzer.p2metadataProps(repositoryId))
   override lazy val analyzerFile = getResourceFile("example-bundle-2.0.0-20150528.145642-258-p2metadata.xml")
+  
 }
