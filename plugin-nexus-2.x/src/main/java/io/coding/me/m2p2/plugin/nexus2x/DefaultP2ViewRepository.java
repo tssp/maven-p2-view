@@ -1,12 +1,8 @@
 package io.coding.me.m2p2.plugin.nexus2x;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Collection;
 
 import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
@@ -17,20 +13,18 @@ import org.eclipse.sisu.Description;
 import org.sonatype.nexus.ApplicationStatusSource;
 import org.sonatype.nexus.configuration.model.CRepository;
 import org.sonatype.nexus.configuration.model.CRepositoryExternalConfigurationHolderFactory;
-import org.sonatype.nexus.plugins.*;
-import org.sonatype.nexus.proxy.AccessDeniedException;
+import org.sonatype.nexus.plugins.RepositoryType;
 import org.sonatype.nexus.proxy.IllegalOperationException;
 import org.sonatype.nexus.proxy.ItemNotFoundException;
 import org.sonatype.nexus.proxy.LocalStorageException;
-import org.sonatype.nexus.proxy.NoSuchResourceStoreException;
 import org.sonatype.nexus.proxy.ResourceStoreRequest;
-import org.sonatype.nexus.proxy.StorageException;
 import org.sonatype.nexus.proxy.events.RepositoryRegistryEvent;
 import org.sonatype.nexus.proxy.events.RepositoryRegistryEventAdd;
 import org.sonatype.nexus.proxy.events.RepositoryRegistryEventRemove;
 import org.sonatype.nexus.proxy.item.DefaultStorageCollectionItem;
 import org.sonatype.nexus.proxy.item.DefaultStorageFileItem;
 import org.sonatype.nexus.proxy.item.FileContentLocator;
+import org.sonatype.nexus.proxy.item.RepositoryItemUid;
 import org.sonatype.nexus.proxy.item.StorageCollectionItem;
 import org.sonatype.nexus.proxy.item.StorageFileItem;
 import org.sonatype.nexus.proxy.item.StorageItem;
@@ -225,13 +219,24 @@ public class DefaultP2ViewRepository extends AbstractShadowRepository implements
     	System.out.println("REQUEST PATH "+request.getRequestPath());
     	
     	try {
+    
+    		StorageItem masterItem = getMasterRepository().getLocalStorage().retrieveItem(getMasterRepository(), request);
     		
-	    	
+    		if(masterItem instanceof StorageCollectionItem) {
+    			
+    			Collection<StorageItem> list = ((StorageCollectionItem) masterItem).list();
+    		
+    			//RepositoryItemUid 
+    			
+    			System.out.println("YEEHAW");
+    		}
+    		
+    		
 	    	if("/".equals(request.getRequestPath())) {
 	
 	    		DefaultStorageCollectionItem dtci= new DefaultStorageCollectionItem(getMasterRepository(), request, true, false);
 	    		
-	    		
+	    		//dtci.setPath(path);
 	    		return dtci;
 	    		
 	    		/*StorageItem masterItem = getMasterRepository().getLocalStorage().retrieveItem(getMasterRepository(), request);
@@ -243,16 +248,14 @@ public class DefaultP2ViewRepository extends AbstractShadowRepository implements
 	    			return virtualItem;
 	    		}*/
 	    		 
-	    		throw new LocalStorageException("Root path is not a collecction"); 
+	    		//throw new LocalStorageException("Root path is not a collecction"); 
 	    		
 	    	} else {
-	
-	    		StorageItem masterItem = getMasterRepository().getLocalStorage().retrieveItem(getMasterRepository(), request);
 	
 	            return masterItem;
 	    	}
 	    	
-    	} catch (AccessDeniedException|StorageException|NoSuchResourceStoreException ex) {
+    	} catch (Exception /*AccessDeniedException|StorageException|NoSuchResourceStoreException*/ ex) {
     		
     		throw new LocalStorageException(ex);
     	}
